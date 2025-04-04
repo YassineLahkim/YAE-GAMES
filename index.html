@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Jeu de Bille avec Pièges</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: url('/img/fond.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            touch-action: none;
+        }
+
+        canvas {
+            display: block;
+            background-color: rgba(76, 175, 80, 0.5);
+        }
+
+        .hole {
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+        }
+
+        #targetHole {
+            background-color: black;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+
+        .trapHole {
+            background-color: #f44336;
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+            border: 3px solid #d32f2f;
+        }
+
+        #ui {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            font-size: 18px;
+            text-shadow: 1px 1px 2px black;
+            transition: opacity 1s;
+            z-index: 100;
+        }
+
+        #message {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            pointer-events: auto;
+            z-index: 100;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 400px;
+            backdrop-filter: blur(5px);
+        }
+
+        #message h2 {
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            color: #FFEB3B;
+        }
+
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 200;
+        }
+
+        button {
+            padding: 12px 24px;
+            margin: 10px;
+            font-size: 16px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            transform: scale(0);
+            opacity: 0;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+        }
+
+        .heart {
+            color: #ff5252;
+            font-size: 20px;
+            margin: 0 3px;
+        }
+
+        @keyframes shake {
+
+            0%,
+            100% {
+                transform: translateX(0);
+            }
+
+            25% {
+                transform: translateX(-5px);
+            }
+
+            75% {
+                transform: translateX(5px);
+            }
+        }
+
+        .shake {
+            animation: shake 0.3s linear;
+        }
+
+        #orientationStatus {
+            margin-top: 10px;
+            font-size: 14px;
+            color: #FFEB3B;
+            opacity: 0;
+        }
+
+        .progress-container {
+            width: 80%;
+            max-width: 300px;
+            height: 20px;
+            background-color: #333;
+            border-radius: 10px;
+            margin: 15px 0;
+            overflow: hidden;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .progress-bar {
+            height: 100%;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            width: 0%;
+            transition: width 0.5s ease-out;
+        }
+
+        #gameTitle {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #FF5722;
+            text-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+            opacity: 0;
+            transform: translateY(-50px);
+        }
+
+        #gameSubtitle {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        @keyframes titleEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes subtitleEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes buttonEnter {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+
+            80% {
+                transform: scale(1.1);
+                opacity: 0.8;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes progressEnter {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+            animation: pulse 2s infinite;
+        }
+
+        #ballPreview {
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle at 30% 30%, #FF5722, #E64A19);
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 20px rgba(255, 87, 34, 0.7);
+            display: none;
+        }
+
+        @keyframes ballIntro {
+            0% {
+                transform: translate(-50%, -50%) scale(0);
+                opacity: 0;
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                opacity: 1;
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 1;
+            }
+        }
+
+        #cheatNotification {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: #FFEB3B;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.5s;
+            z-index: 300;
+        }
+
+        #hintButton {
+            padding: 5px 10px;
+            margin-top: 10px;
+            font-size: 14px;
+            background-color: #ffffff;
+            color: rgb(12, 12, 12);
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            display: block;
+        }
+
+        #hintText {
+            color: #FFEB3B;
+            font-size: 14px;
+            display: none;
+            margin-top: 10px;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 8px 12px;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 235, 59, 0.3);
+        }
+
+        #hintButton:hover {
+            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        @keyframes goldPulse {
+            0% {
+                box-shadow: 0 0 10px gold;
+            }
+
+            50% {
+                box-shadow: 0 0 30px gold;
+            }
+
+            100% {
+                box-shadow: 0 0 10px gold;
+            }
+        }
+
+        .cheat-active {
+            animation: goldPulse 1s infinite;
+        }
+
+        #restartButton {
+            padding: 10px 20px;
+            margin: 20px auto 0 auto;
+            width: 20px;
+            font-size: 16px;
+            background-color: #FF5722;
+            color: white;
+            border-radius: 25px;
+            cursor: pointer;
+            width: auto;
+            display: block;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        /* Style pour le décompte */
+        #countdown {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 10rem;
+            color: #FF5722;
+            z-index: 300;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #countdown span {
+            animation: pulseCount 0.5s ease-out;
+            text-shadow: 0 0 20px rgba(255, 87, 34, 0.7);
+        }
+
+        @keyframes pulseCount {
+            0% {
+                transform: scale(0.5);
+                opacity: 0;
+            }
+
+            50% {
+                transform: scale(1.2);
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes fadeOut {
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="gameCanvas"></canvas>
+    <div id="targetHole" class="hole"></div>
+    <div id="trapHole1" class="hole trapHole"></div>
+    <div id="trapHole2" class="hole trapHole"></div>
+    <div id="trapHole3" class="hole trapHole"></div>
+    <div id="ballPreview"></div>
+    <div id="countdown"></div>
+
+    <div id="ui">
+        <div>Score: <span id="score">0</span></div>
+        <div>Vies: <span id="lives"></span></div>
+        <div>Succès: <span id="success">0</span>/3</div>
+        <div id="hintButton" style="display: block; text-align:center;">Hint</div>
+        <div id="hintText" style="display: none; margin-top: 10px; color: rgb(235, 255, 53); font-size: 16px;">
+            Cheat code: ⬆⬆ ⬇⬇ ⬅⮕ ⬅⮕ BA
+        </div>
+    </div>
+
+    <div id="message">
+        <h2 id="resultMessage"></h2>
+        <div id="restartButton">Rejouer</div>
+    </div>
+
+    <div id="startScreen">
+        <h1 id="gameTitle">Bille Master</h1>
+        <p id="gameSubtitle">Atteignez le trou noir 3 fois pour gagner !</p>
+        <div id="controlInfo"></div>
+        <div id="orientationStatus"></div>
+        <div class="progress-container" id="progressContainer">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+        <button id="startButton" class="pulse">Commencer</button>
+        <button id="permissionButton" style="background-color: #2196F3;">
+            Activer l'inclinaison
+        </button>
+    </div>
+
+    <div id="cheatNotification">Cheat code activé !</div>
+
+    <script>
+        // Éléments du DOM
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const targetHole = document.getElementById('targetHole');
+        const trapHoles = [
+            document.getElementById('trapHole1'),
+            document.getElementById('trapHole2'),
+            document.getElementById('trapHole3')
+        ];
+        const uiScore = document.getElementById('score');
+        const uiLives = document.getElementById('lives');
+        const uiSuccess = document.getElementById('success');
+        const progressBar = document.getElementById('progressBar');
+        const progressContainer = document.getElementById('progressContainer');
+        const message = document.getElementById('message');
+        const resultMessage = document.getElementById('resultMessage');
+        const restartButton = document.getElementById('restartButton');
+        const startScreen = document.getElementById('startScreen');
+        const startButton = document.getElementById('startButton');
+        const permissionButton = document.getElementById('permissionButton');
+        const controlInfo = document.getElementById('controlInfo');
+        const orientationStatus = document.getElementById('orientationStatus');
+        const gameTitle = document.getElementById('gameTitle');
+        const gameSubtitle = document.getElementById('gameSubtitle');
+        const ballPreview = document.getElementById('ballPreview');
+        const cheatNotification = document.getElementById('cheatNotification');
+        const hintButton = document.getElementById('hintButton');
+        const hintText = document.getElementById('hintText');
+        const countdown = document.getElementById('countdown');
+
+        // Dimensions
+        let width, height;
+        const ballRadius = 20;
+        const holeRadius = 30;
+
+        // Physique
+        const friction = 0.98;
+        const gravity = 0.15;
+        const maxSpeed = 12;
+        const tiltSensitivity = 0.8;
+
+        // État du jeu
+        let ball = { x: 0, y: 0, vx: 0, vy: 0 };
+        let gameActive = false;
+        let usingOrientation = false;
+        let orientationPermissionGranted = false;
+        let score = 0;
+        let lives = 3;
+        let successes = 0;
+        const successesNeeded = 3;
+        let holePositions = [];
+        let isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        // Cheat code
+        const konamiCode = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown',
+            'ArrowLeft', 'ArrowRight', 'ArrowLeft', 'ArrowRight',
+            'b', 'a'];
+        let konamiIndex = 0;
+        let cheatActivated = false;
+
+        // Cheat mobile
+        let tapSequence = [];
+        const cheatTapPattern = [2, 2]; // 2-2
+        let lastTapTime = 0;
+        let hintShown = false;
+
+        function showCheatNotification() {
+            cheatNotification.style.opacity = 1;
+            setTimeout(() => {
+                cheatNotification.style.opacity = 0;
+            }, 2000);
+        }
+
+        function showHint() {
+            hintShown = !hintShown;
+            hintText.style.display = hintShown ? 'block' : 'none';
+            hintButton.textContent = hintShown ? 'Cacher indice' : 'Indice';
+
+            if (hintShown) {
+                hintText.style.animation = 'none';
+                void hintText.offsetWidth;
+                hintText.style.animation = 'pulse 0.5s 2';
+            }
+        }
+
+        function activateCheat() {
+            if (cheatActivated) return;
+            cheatActivated = true;
+            showCheatNotification();
+
+            // Crée une bille dorée pour l'animation
+            const cheatBall = document.createElement('div');
+            cheatBall.style.position = 'absolute';
+            cheatBall.style.width = ballRadius * 2 + 'px';
+            cheatBall.style.height = ballRadius * 2 + 'px';
+            cheatBall.style.borderRadius = '50%';
+            cheatBall.style.background = 'radial-gradient(circle at 30% 30%, gold, orange)';
+            cheatBall.style.left = (ball.x - ballRadius) + 'px';
+            cheatBall.style.top = (ball.y - ballRadius) + 'px';
+            cheatBall.style.zIndex = '100';
+            cheatBall.style.transition = 'all 1s ease-out, transform 0.5s ease-out';
+            cheatBall.style.boxShadow = '0 0 20px gold';
+            document.body.appendChild(cheatBall);
+
+            // Anime le trou cible
+            const targetHolePos = holePositions.find(hole => hole.isTarget);
+            const holeElement = document.getElementById('targetHole');
+            holeElement.classList.add('cheat-active');
+
+            // Animation vers le trou
+            setTimeout(() => {
+                cheatBall.style.left = (targetHolePos.x - ballRadius) + 'px';
+                cheatBall.style.top = (targetHolePos.y - ballRadius) + 'px';
+                cheatBall.style.transform = 'scale(0.5)';
+
+                setTimeout(() => {
+                    cheatBall.style.opacity = '0';
+                    holeElement.style.transform = 'translate(-50%, -50%) scale(1.5)';
+
+                    setTimeout(() => {
+                        document.body.removeChild(cheatBall);
+                        holeElement.style.transform = 'translate(-50%, -50%) scale(1)';
+                        holeElement.classList.remove('cheat-active');
+
+                        // Victoire instantanée
+                        successes = successesNeeded;
+                        updateUI();
+                        gameOver(true);
+                    }, 500);
+                }, 800);
+            }, 100);
+        }
+
+        function checkKonamiCode(key) {
+            if (cheatActivated) return;
+
+            if (key.toLowerCase() === konamiCode[konamiIndex].toLowerCase()) {
+                konamiIndex++;
+                if (konamiIndex === konamiCode.length) {
+                    activateCheat();
+                    konamiIndex = 0;
+                }
+            } else {
+                konamiIndex = 0;
+            }
+        }
+
+        function handleTap() {
+            const now = Date.now();
+            if (now - lastTapTime > 1000) {
+                tapSequence = [];
+            }
+
+            tapSequence.push(now);
+            lastTapTime = now;
+
+            setTimeout(() => {
+                if (tapSequence.length === cheatTapPattern.reduce((a, b) => a + b, 0)) {
+                    let patternIndex = 0;
+                    let count = 0;
+                    let valid = true;
+
+                    for (let i = 1; i < tapSequence.length; i++) {
+                        const delta = tapSequence[i] - tapSequence[i - 1];
+                        if (delta < 300) {
+                            count++;
+                        } else {
+                            if (count + 1 !== cheatTapPattern[patternIndex]) {
+                                valid = false;
+                                break;
+                            }
+                            patternIndex++;
+                            count = 0;
+                        }
+                    }
+
+                    if (valid && count + 1 === cheatTapPattern[patternIndex] && patternIndex === cheatTapPattern.length - 1) {
+                        activateCheat();
+                    }
+                }
+            }, 500);
+        }
+
+        // Initialisation
+        function init() {
+            resizeCanvas();
+            setupControlInfo();
+            checkOrientationSupport();
+            playIntroAnimation();
+
+            document.addEventListener('keydown', (e) => {
+                checkKonamiCode(e.key);
+            });
+
+            hintButton.addEventListener('click', showHint);
+            canvas.addEventListener('touchstart', handleTap);
+
+            requestAnimationFrame(gameLoop);
+        }
+
+        function playIntroAnimation() {
+            gameTitle.style.animation = "titleEnter 1s ease-out forwards";
+
+            setTimeout(() => {
+                gameSubtitle.style.animation = "subtitleEnter 0.8s ease-out forwards";
+            }, 300);
+
+            setTimeout(() => {
+                startButton.style.animation = "buttonEnter 0.6s ease-out forwards";
+                permissionButton.style.animation = "buttonEnter 0.6s ease-out 0.2s forwards";
+            }, 800);
+
+            setTimeout(() => {
+                progressContainer.style.animation = "progressEnter 0.6s ease-out forwards";
+                orientationStatus.style.opacity = 1;
+                orientationStatus.style.transition = "opacity 1s 0.5s";
+            }, 1200);
+
+            setTimeout(() => {
+                ballPreview.style.display = "block";
+                ballPreview.style.left = "50%";
+                ballPreview.style.top = "70%";
+                ballPreview.style.transform = "translate(-50%, -50%)";
+                ballPreview.style.animation = "ballIntro 1s ease-out forwards";
+
+                setTimeout(() => {
+                    ballPreview.style.transition = "all 0.5s cubic-bezier(0.5, -0.5, 0.5, 1.5)";
+                    ballPreview.style.top = "65%";
+
+                    setTimeout(() => {
+                        ballPreview.style.top = "70%";
+                    }, 500);
+                }, 1200);
+            }, 1500);
+        }
+
+        function resizeCanvas() {
+            width = window.innerWidth;
+            height = window.innerHeight;
+            canvas.width = width;
+            canvas.height = height;
+
+            if (gameActive) {
+                placeHoles();
+                ball.x = Math.min(ball.x, width - ballRadius);
+                ball.y = Math.min(ball.y, height - ballRadius);
+            }
+        }
+
+        function setupControlInfo() {
+            if (isMobile) {
+                controlInfo.innerHTML = `
+                    <p>📱 Inclinez votre téléphone</p>
+                    <p>ou touchez l'écran pour contrôler</p>
+                `;
+            } else {
+                controlInfo.innerHTML = `
+                    <p>🖱️ Déplacez la souris</p>
+                `;
+            }
+        }
+
+        function checkOrientationSupport() {
+            if (window.DeviceOrientationEvent) {
+                if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+                    permissionButton.style.display = 'block';
+                    permissionButton.addEventListener('click', requestOrientationPermission);
+                    orientationStatus.textContent = "L'inclinaison n'est pas activée";
+                } else {
+                    usingOrientation = true;
+                    orientationStatus.textContent = "Contrôle par inclinaison disponible";
+                    permissionButton.style.display = 'none';
+                }
+            } else {
+                orientationStatus.textContent = "Votre appareil ne supporte pas l'inclinaison";
+                permissionButton.style.display = 'none';
+            }
+        }
+
+        function requestOrientationPermission() {
+            DeviceOrientationEvent.requestPermission()
+                .then(response => {
+                    if (response === 'granted') {
+                        usingOrientation = true;
+                        orientationPermissionGranted = true;
+                        permissionButton.style.display = 'none';
+                        orientationStatus.textContent = "Contrôle par inclinaison activé !";
+                        permissionButton.textContent = "Inclinaison activée";
+                        permissionButton.style.backgroundColor = "#4CAF50";
+
+                        window.addEventListener('deviceorientation', handleOrientation);
+                    } else {
+                        orientationStatus.textContent = "Permission refusée - Utilisez le toucher";
+                        permissionButton.textContent = "Permission refusée";
+                        permissionButton.style.backgroundColor = "#f44336";
+                    }
+                })
+                .catch(error => {
+                    console.error("Erreur de permission:", error);
+                    orientationStatus.textContent = "Erreur d'activation - Utilisez le toucher";
+                    permissionButton.textContent = "Erreur d'activation";
+                    permissionButton.style.backgroundColor = "#f44336";
+                });
+        }
+
+        function startGame() {
+            startScreen.style.opacity = 0;
+            startScreen.style.transition = "opacity 0.8s ease-out";
+
+            // Démarrer le décompte
+            startCountdown();
+        }
+
+        function startCountdown() {
+            const countdown = document.getElementById('countdown');
+            countdown.style.opacity = 1;
+
+            let count = 3;
+            countdown.textContent = count;
+
+            const countdownInterval = setInterval(() => {
+                count--;
+                if (count > 0) {
+                    countdown.textContent = count;
+                } else {
+                    countdown.textContent = "GO!";
+                    setTimeout(() => {
+                        countdown.style.animation = "fadeOut 0.5s forwards";
+                        setTimeout(() => {
+                            countdown.style.display = 'none';
+                            initGameAfterCountdown();
+                        }, 500);
+                    }, 500);
+                    clearInterval(countdownInterval);
+                }
+            }, 1000);
+        }
+
+        function initGameAfterCountdown() {
+            startScreen.style.display = 'none';
+            document.getElementById('ui').style.opacity = 1;
+            gameActive = true;
+            score = 0;
+            lives = 3;
+            successes = 0;
+            updateUI();
+            placeHoles();
+            resetBall();
+
+            if (usingOrientation && orientationPermissionGranted) {
+                window.addEventListener('deviceorientation', handleOrientation);
+            }
+
+            if (!isMobile) {
+                canvas.addEventListener('mousemove', handleMouseMove);
+            }
+            canvas.addEventListener('touchmove', handleTouchMove, { passive: false });
+        }
+
+        function placeHoles() {
+            targetHole.style.left = '50%';
+            targetHole.style.top = '50%';
+            holePositions = [{ x: width / 2, y: height / 2, isTarget: true }];
+
+            const positions = [
+                { x: width * 0.3, y: height * 0.3 },
+                { x: width * 0.7, y: height * 0.3 },
+                { x: width * 0.3, y: height * 0.7 },
+                { x: width * 0.7, y: height * 0.7 }
+            ];
+
+            const shuffled = positions.sort(() => 0.5 - Math.random());
+            for (let i = 0; i < 3; i++) {
+                trapHoles[i].style.left = shuffled[i].x + 'px';
+                trapHoles[i].style.top = shuffled[i].y + 'px';
+                holePositions.push({ x: shuffled[i].x, y: shuffled[i].y, isTarget: false });
+            }
+        }
+
+        function resetBall() {
+            ball.x = ballRadius + Math.random() * (width - 2 * ballRadius);
+            ball.y = ballRadius + Math.random() * (height - 2 * ballRadius);
+            ball.vx = 0;
+            ball.vy = 0;
+        }
+
+        function resetGame() {
+            cheatActivated = false;
+            message.style.display = 'none';
+            gameActive = true;
+            score = 0;
+            lives = 3;
+            successes = 0;
+            updateUI();
+            placeHoles();
+            resetBall();
+        }
+
+        function handleOrientation(e) {
+            if (!gameActive || !usingOrientation) return;
+
+            const maxTilt = 30;
+            const tiltX = e.gamma ? Math.min(Math.max(e.gamma / maxTilt, -1), 1) : 0;
+            const tiltY = e.beta ? Math.min(Math.max((e.beta - 90) / maxTilt, -1), 1) : 0;
+
+            ball.vx += tiltX * gravity * tiltSensitivity * 0.7;
+            ball.vy += tiltY * gravity * tiltSensitivity * 0.7;
+        }
+
+        function handleMouseMove(e) {
+            if (!gameActive) return;
+
+            const tiltX = (e.clientX - width / 2) / (width / 2);
+            const tiltY = (e.clientY - height / 2) / (height / 2);
+
+            ball.vx += tiltX * gravity * 0.6;
+            ball.vy += tiltY * gravity * 0.6;
+        }
+
+        function handleTouchMove(e) {
+            if (!gameActive) return;
+            e.preventDefault();
+
+            const touchX = e.touches[0].clientX;
+            const touchY = e.touches[0].clientY;
+
+            const tiltX = (touchX - width / 2) / (width / 2);
+            const tiltY = (touchY - height / 2) / (height / 2);
+
+            ball.vx += tiltX * gravity * 0.5;
+            ball.vy += tiltY * gravity * 0.5;
+        }
+
+        function update() {
+            if (!gameActive) return;
+
+            ball.vx *= friction;
+            ball.vy *= friction;
+
+            const speed = Math.sqrt(ball.vx * ball.vx + ball.vy * ball.vy);
+            if (speed > maxSpeed) {
+                ball.vx = (ball.vx / speed) * maxSpeed;
+                ball.vy = (ball.vy / speed) * maxSpeed;
+            }
+
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            if (ball.x < ballRadius) {
+                ball.x = ballRadius;
+                ball.vx = -ball.vx * 0.5;
+            }
+            if (ball.x > width - ballRadius) {
+                ball.x = width - ballRadius;
+                ball.vx = -ball.vx * 0.5;
+            }
+            if (ball.y < ballRadius) {
+                ball.y = ballRadius;
+                ball.vy = -ball.vy * 0.5;
+            }
+            if (ball.y > height - ballRadius) {
+                ball.y = height - ballRadius;
+                ball.vy = -ball.vy * 0.5;
+            }
+
+            checkHoleCollisions();
+        }
+
+        function checkHoleCollisions() {
+            for (const hole of holePositions) {
+                const dx = ball.x - hole.x;
+                const dy = ball.y - hole.y;
+                const distance = Math.sqrt(dx * dx + dy * dy);
+
+                if (distance < holeRadius) {
+                    if (hole.isTarget) {
+                        score += 10;
+                        successes++;
+                        updateUI();
+                        document.body.classList.add('shake');
+                        setTimeout(() => document.body.classList.remove('shake'), 300);
+
+                        if (successes >= successesNeeded) {
+                            gameOver(true);
+                        } else {
+                            placeHoles();
+                            resetBall();
+                        }
+                    } else {
+                        lives--;
+                        updateUI();
+
+                        if (lives <= 0) {
+                            gameOver(false);
+                        } else {
+                            document.body.classList.add('shake');
+                            setTimeout(() => document.body.classList.remove('shake'), 300);
+                            resetBall();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        function gameOver(isWin) {
+            gameActive = false;
+            resultMessage.textContent = isWin ? "Bravo ! Vous avez gagné ! " : "Game Over !";
+            if (cheatActivated) {
+                resultMessage.textContent += " (Cheat activé)";
+            }
+            message.style.display = 'block';
+        }
+
+        function updateUI() {
+            uiScore.textContent = score;
+            uiSuccess.textContent = `${successes}/${successesNeeded}`;
+            progressBar.style.width = `${(successes / successesNeeded) * 100}%`;
+
+            uiLives.innerHTML = '';
+            for (let i = 0; i < lives; i++) {
+                uiLives.innerHTML += '<span class="heart">❤</span>';
+            }
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, width, height);
+
+            ctx.beginPath();
+            ctx.arc(ball.x, ball.y, ballRadius, 0, Math.PI * 2);
+            ctx.fillStyle = '#FFA500'; // Couleur orange pour la balle
+            ctx.fill();
+            ctx.strokeStyle = '#FF8C00'; // Couleur orange foncé pour le contour
+            ctx.lineWidth = 3;
+            ctx.stroke();
+
+            ctx.beginPath();
+            ctx.arc(ball.x - ballRadius * 0.3, ball.y - ballRadius * 0.3, ballRadius * 0.2, 0, Math.PI * 2);
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.3)';
+            ctx.fill();
+        }
+
+        function gameLoop() {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+
+        startButton.addEventListener('click', startGame);
+        restartButton.addEventListener('click', resetGame);
+        window.addEventListener('resize', resizeCanvas);
+
+        init();
+    </script>
+</body>
+</html>
