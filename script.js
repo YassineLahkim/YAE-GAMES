@@ -14,6 +14,60 @@ const gameOverScreen = document.getElementById('gameOverScreen');
 const winScreen = document.getElementById('winScreen');
 const levelSelection = document.getElementById('levelSelection');
 
+/* ========== NOUVELLES CONSTANTES DE DIFFICULTÉ ========== */
+const DIFFICULTY_SETTINGS = {
+    easy: {
+        obstacleSpeed: 10,       // Plus rapide qu'avant
+        spawnRate: 900,        // Apparition des obstacles plus fréquente
+        playerWidth: 0.07,      // Joueur un peu plus petit (plus difficile)
+        timer: 15               // Moins de temps pour finir
+    },
+    medium: {
+        obstacleSpeed: 13,      // Plus rapide
+        spawnRate: 700,         // Obstacle très fréquent
+        playerWidth: 0.06,      // Plus petit encore
+        timer: 15
+    },
+    hard: {
+        obstacleSpeed: 16,      // Très rapide
+        spawnRate: 500,         // Obstacle toutes les 0.6 secondes
+        playerWidth: 0.05,      // Très petit joueur
+        timer: 12
+    },
+    blind: {
+        obstacleSpeed: 8,       // Plus rapide que l’ancien blind
+        spawnRate: 1000,        // Apparition assez fréquente
+        playerWidth: 0.08,      // Taille raisonnable (car malvoyant)
+        timer: 20               // Moins de temps que les 35 secondes d’avant
+    }
+};
+
+
+const obstacleImages = [
+    new Image(),
+    new Image(),
+    new Image(),
+    new Image()
+];
+
+obstacleImages[0].src = 'img/img-obstacle1.png';
+obstacleImages[1].src = 'img/img-obstacle2.png';
+obstacleImages[2].src = 'img/img-obstacle3.png';
+obstacleImages[3].src = 'img/img-obstacle4.png';
+
+function createObstacle() {
+    const randomImage = obstacleImages[Math.floor(Math.random() * obstacleImages.length)];
+
+    return {
+        x: Math.random(),         // position X en % (0 à 1)
+        y: 0,                     // position Y
+        width: 0.1,               // largeur en % (ajuste selon ton image)
+        height: 0.1,              // hauteur en % (ajuste aussi)
+        image: randomImage        // l'image à dessiner
+    };
+}
+
+
 /* ========== VARIABLES DU JEU ========== */
 let canvasWidth, canvasHeight;
 
@@ -43,9 +97,7 @@ let gameInterval;
 let spawnInterval;
 let timerInterval;
 
-// Variables de contrôle tactile
-let touchId = null;
-let touchStartX = 0;
+
 
 /* ========== INITIALISATION ========== */
 function init() {
@@ -53,7 +105,7 @@ function init() {
     setupControls();
     startPreview();
     window.addEventListener('resize', setupCanvas);
-    
+
     // Détection de la prise en charge de l'inclinaison
     if (typeof DeviceOrientationEvent !== 'undefined' && typeof DeviceOrientationEvent.requestPermission === 'function') {
         tiltButton.style.display = 'block';
@@ -100,7 +152,7 @@ function handleTouchStart(e) {
         const touch = e.touches[0];
         touchId = touch.identifier;
         touchStartX = touch.clientX;
-        
+
         // Vérifier si on touche le bouton pause
         const rect = pauseButton.getBoundingClientRect();
         if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
@@ -113,7 +165,7 @@ function handleTouchStart(e) {
 function handleTouchMove(e) {
     e.preventDefault();
     if (!player.visible || isPaused || !touchId) return;
-    
+
     for (let i = 0; i < e.changedTouches.length; i++) {
         const touch = e.changedTouches[i];
         if (touch.identifier === touchId) {
@@ -141,7 +193,7 @@ function setupTiltControls() {
 
 function handleOrientation(e) {
     if (!tiltEnabled || isPaused || !player.visible) return;
-    
+
     if (e.gamma !== null) {
         const tilt = e.gamma * 0.5;
         player.x = Math.max(0, Math.min(canvasWidth - player.width, player.x + tilt));
@@ -166,7 +218,7 @@ async function toggleTiltControls() {
     } else {
         tiltEnabled = !tiltEnabled;
         tiltButton.textContent = tiltEnabled ? 'Désactiver Inclinaison' : 'Activer Inclinaison';
-        
+
         if (!tiltEnabled) {
             player.x = canvasWidth / 2 - player.width / 2;
         }
@@ -182,13 +234,13 @@ function startPreview() {
 
 function updatePreview() {
     previewCtx.clearRect(0, 0, canvasWidth, canvasHeight);
-    
+
     previewCtx.fillStyle = '#333';
     obstacles.forEach(obs => {
         obs.y += obs.speed;
         previewCtx.fillRect(obs.x, obs.y, obs.width, obs.height);
     });
-    
+
     obstacles = obstacles.filter(obs => obs.y < canvasHeight);
 }
 
@@ -202,22 +254,22 @@ function startGame(level) {
     obstacles = [];
     updateHeartsDisplay();
 
-    switch(level) {
-        case 'easy': 
-            obstacleSpeed = 2; 
-            spawnRate = 2000; 
+    switch (level) {
+        case 'easy':
+            obstacleSpeed = 2;
+            spawnRate = 2000;
             break;
-        case 'medium': 
-            obstacleSpeed = 3; 
-            spawnRate = 1500; 
+        case 'medium':
+            obstacleSpeed = 3;
+            spawnRate = 1500;
             break;
-        case 'hard': 
-            obstacleSpeed = 4; 
-            spawnRate = 1000; 
+        case 'hard':
+            obstacleSpeed = 4;
+            spawnRate = 1000;
             break;
-        case 'blind': 
-            obstacleSpeed = 1.5; 
-            spawnRate = 2500; 
+        case 'blind':
+            obstacleSpeed = 1.5;
+            spawnRate = 2500;
             break;
     }
 
@@ -244,7 +296,7 @@ function startCountdown() {
     const interval = setInterval(() => {
         countdownElement.textContent = count > 0 ? count : 'GO!';
         count--;
-        
+
         if (count < -1) {
             clearInterval(interval);
             document.body.removeChild(countdownElement);
@@ -283,26 +335,29 @@ function updateGame() {
     }
 }
 
+
 function spawnObstacle() {
     if (isPaused) return;
-    
-    const width = canvasWidth * 0.1 + Math.random() * canvasWidth * 0.075;
-    const height = canvasHeight * 0.1;
+
+    // Nouveau système de génération d'obstacles plus difficiles
+    const width = canvasWidth * (0.08 + Math.random() * 0.08); // Largeur variable
+    const height = canvasHeight * (0.1 + Math.random() * 0.05); // Hauteur variable
+
     obstacles.push({
         x: Math.random() * (canvasWidth - width),
         y: -height,
         width: width,
         height: height,
-        speed: obstacleSpeed
+        speed: obstacleSpeed * (0.9 + Math.random() * 0.3) // Vitesse légèrement variable
     });
 }
-
 function updateTimer() {
     if (!isPaused && gameStarted) {
         timer--;
         timerDisplay.textContent = timer;
         if (timer <= 0) showWinScreen();
     }
+    
 }
 
 function updateHeartsDisplay() {
@@ -318,9 +373,9 @@ function updateHeartsDisplay() {
 /* ========== COLLISIONS ========== */
 function checkCollision(player, obstacle) {
     return player.x < obstacle.x + obstacle.width &&
-           player.x + player.width > obstacle.x &&
-           player.y < obstacle.y + obstacle.height &&
-           player.y + player.height > obstacle.y;
+        player.x + player.width > obstacle.x &&
+        player.y < obstacle.y + obstacle.height &&
+        player.y + player.height > obstacle.y;
 }
 
 function handleCollision(obstacle) {
@@ -333,10 +388,63 @@ function handleCollision(obstacle) {
     }
 }
 
-/* ========== PAUSE ========== */
+/* ========== GESTION DE LA PAUSE ========== */
 function togglePause() {
     isPaused = !isPaused;
-    
+
+    if (isPaused) {
+        // Afficher le menu pause
+        document.getElementById('pauseMenu').style.display = 'flex';
+
+        // Stopper les intervalles
+        clearInterval(spawnInterval);
+        clearInterval(timerInterval);
+
+        // Sur mobile: empêcher le défilement accidentel
+        document.body.style.overflow = 'hidden';
+    } else {
+        // Cacher le menu pause
+        document.getElementById('pauseMenu').style.display = 'none';
+
+        // Redémarrer le jeu
+        startGameLoops();
+
+        // Rétablir le défilement
+        document.body.style.overflow = '';
+    }
+}
+
+/* ========== FONCTION PAUSE ORIGINALE ========== */
+function togglePause() {
+    isPaused = !isPaused;
+    const pauseMenu = document.getElementById('pauseMenu');
+
+    if (isPaused) {
+        // Mode pause activé
+        pauseMenu.style.display = 'flex';
+        clearInterval(spawnInterval);
+        clearInterval(timerInterval);
+
+        // Empêcher le défilement sur mobile
+        document.addEventListener('touchmove', preventScrollDuringPause, { passive: false });
+    } else {
+        // Mode pause désactivé
+        pauseMenu.style.display = 'none';
+        startGameLoops();
+
+        // Réautoriser le défilement
+        document.removeEventListener('touchmove', preventScrollDuringPause);
+    }
+}
+
+function preventScrollDuringPause(e) {
+    if (isPaused) {
+        e.preventDefault();
+    }
+}/* ========== PAUSE ========== */
+function togglePause() {
+    isPaused = !isPaused;
+
     if (isPaused) {
         pauseMenu.style.display = 'flex';
         clearInterval(spawnInterval);
