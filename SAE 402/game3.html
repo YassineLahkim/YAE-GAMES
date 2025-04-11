@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Reactor - Édition Spéciale</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #1a1a2e;
+            color: white;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            /* overflow: hidden; */
+        }
+
+        .game-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%;
+            max-width: 400px;
+        }
+
+        .game-header {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .game-title {
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: #ff5555;
+        }
+
+        .game-info {
+            display: flex;
+            justify-content: space-between;
+            width: 100%;
+            margin-bottom: 15px;
+        }
+
+        .level-display, .score-display {
+            background-color: #16213e;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-gap: 10px;
+            width: 100%;
+            max-width: 300px;
+            margin-bottom: 20px;
+        }
+
+        .grid-cell {
+            aspect-ratio: 1/1;
+            background-color: #0f3460;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+            overflow: hidden;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .grid-cell::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #ff5555;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .grid-cell.active::before {
+            opacity: 0.7;
+        }
+
+        .grid-cell.correct::before {
+            background-color: #4ade80;
+        }
+
+        .grid-cell.wrong::before {
+            background-color: #ff5555;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+
+        .controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        button {
+            background-color: #ff5555;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.2s;
+        }
+
+        button:hover {
+            background-color: #ff3333;
+        }
+
+        .message {
+            margin-top: 15px;
+            font-size: 18px;
+            height: 25px;
+            color: #4ade80;
+            text-align: center;
+            min-height: 50px;
+        }
+
+        .game-over {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .game-over.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .game-over-content {
+            background-color: #16213e;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .game-over h2 {
+            color: #ff5555;
+            margin-bottom: 20px;
+        }
+
+        .win-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        .win-screen.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .win-content {
+            background-color: #16213e;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            max-width: 300px;
+        }
+
+        .win-screen h2 {
+            color: #4ade80;
+            margin-bottom: 20px;
+        }
+
+        .progress-container {
+            width: 100%;
+            background-color: #0f3460;
+            border-radius: 10px;
+            margin: 15px 0;
+            height: 10px;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background-color: #4ade80;
+            border-radius: 10px;
+            width: 0%;
+            transition: width 0.3s;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1 class="game-title">MEMORY REACTOR</h1>
+            <p>Mémorisez et reproduisez la séquence</p>
+        </div>
+
+        <div class="game-info">
+            <div class="level-display">Niveau: <span id="level">1</span>/5</div>
+            <div class="score-display">Score: <span id="score">0</span></div>
+        </div>
+
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
+
+        <div class="grid-container" id="grid">
+            <!-- Les cellules seront générées en JS -->
+        </div>
+
+        <div class="message" id="message">Cliquez sur "Commencer" pour jouer!</div>
+
+        <div class="controls">
+            <button id="startBtn">Commencer</button>
+            <button id="restartBtn">Recommencer</button>
+        </div>
+    </div>
+
+    <div class="game-over" id="gameOver">
+        <div class="game-over-content">
+            <h2>GAME OVER</h2>
+            <p>Votre score final: <span id="finalScore">0</span></p>
+            <button id="playAgainBtn">Rejouer</button>
+        </div>
+    </div>
+
+    <div class="win-screen" id="winScreen">
+        <div class="win-content">
+            <h2>VICTOIRE !</h2>
+            <p>Félicitations ! Vous avez complété les 5 niveaux !</p>
+            <p>Score final: <span id="winScore">0</span></p>
+            <button id="newGameBtn">Nouvelle partie</button>
+        </div>
+    </div>
+
+    <!-- Sons pour chaque case (notes de musique) -->
+    <audio id="soundC" src="son/do.mp3"></audio>
+    <audio id="soundD" src="son/ré.mp3"></audio>
+    <audio id="soundE" src="son/mi.mp3"></audio>
+    <audio id="soundF" src="son/fa.mp3"></audio>
+    <audio id="soundG" src="son/sol.mp3"></audio>
+    <audio id="soundA" src="son/la.mp3"></audio>
+    <audio id="soundB" src="son/si.mp3"></audio>
+    <audio id="soundC2" src="son/Lo.mp3"></audio>
+    <audio id="soundD2" src="son/to.mp3"></audio>
+
+    <!-- Sons d'effets -->
+    <audio id="correctSound" src="https://assets.mixkit.co/sfx/preview/mixkit-correct-answer-tone-2870.mp3"></audio>
+    <audio id="wrongSound" src="https://assets.mixkit.co/sfx/preview/mixkit-wrong-answer-fail-notification-946.mp3"></audio>
+    <audio id="winSound" src="https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3"></audio>
+
+    <script>
+        // Éléments du DOM
+        const grid = document.getElementById('grid');
+        const startBtn = document.getElementById('startBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const playAgainBtn = document.getElementById('playAgainBtn');
+        const newGameBtn = document.getElementById('newGameBtn');
+        const levelDisplay = document.getElementById('level');
+        const scoreDisplay = document.getElementById('score');
+        const finalScoreDisplay = document.getElementById('finalScore');
+        const winScoreDisplay = document.getElementById('winScore');
+        const messageEl = document.getElementById('message');
+        const gameOverScreen = document.getElementById('gameOver');
+        const winScreen = document.getElementById('winScreen');
+        const progressBar = document.getElementById('progressBar');
+
+        // Sons (un par case)
+        const noteSounds = [
+            document.getElementById('soundC'),
+            document.getElementById('soundD'),
+            document.getElementById('soundE'),
+            document.getElementById('soundF'),
+            document.getElementById('soundG'),
+            document.getElementById('soundA'),
+            document.getElementById('soundB'),
+            document.getElementById('soundC2'),
+            document.getElementById('soundD2')
+        ];
+
+        // Sons d'effets
+        const correctSound = document.getElementById('correctSound');
+        const wrongSound = document.getElementById('wrongSound');
+        const winSound = document.getElementById('winSound');
+
+        // Variables du jeu
+        let sequence = [];
+        let playerSequence = [];
+        let level = 1;
+        const maxLevel = 5;
+        let score = 0;
+        let isPlaying = false;
+        let isShowingSequence = false;
+        let cells = [];
+
+        // Notes de musique pour chaque case
+        const noteLabels = ['Do', 'Ré', 'Mi', 'Fa', 'Sol', 'La', 'Si', 'Lo', 'To'];
+
+        // Créer la grille 3x3
+        function createGrid() {
+            grid.innerHTML = '';
+            cells = [];
+            
+            for (let i = 0; i < 9; i++) {
+                const cell = document.createElement('div');
+                cell.className = 'grid-cell';
+                cell.dataset.index = i;
+                cell.textContent = noteLabels[i];
+                cell.addEventListener('click', handleCellClick);
+                grid.appendChild(cell);
+                cells.push(cell);
+            }
+        }
+
+        // Générer une séquence aléatoire
+        function generateSequence() {
+            sequence = [];
+            for (let i = 0; i < level; i++) {
+                const randomIndex = Math.floor(Math.random() * 9);
+                sequence.push(randomIndex);
+            }
+        }
+
+        // Afficher la séquence au joueur
+        function showSequence() {
+            isShowingSequence = true;
+            let i = 0;
+            
+            const interval = setInterval(() => {
+                if (i >= sequence.length) {
+                    clearInterval(interval);
+                    isShowingSequence = false;
+                    playerSequence = [];
+                    messageEl.textContent = 'À votre tour!';
+                    return;
+                }
+                
+                const cellIndex = sequence[i];
+                activateCell(cellIndex, true);
+                i++;
+            }, 800);
+        }
+
+        // Activer une cellule (visuellement et sonorement)
+        function activateCell(index, isSequence = false) {
+            const cell = cells[index];
+            
+            // Effet visuel
+            cell.classList.add('active');
+            
+            // Jouer le son correspondant à la case
+            noteSounds[index].currentTime = 0;
+            noteSounds[index].play();
+            
+            // Désactiver après un délai
+            setTimeout(() => {
+                cell.classList.remove('active');
+            }, 500);
+        }
+
+        // Gérer le clic sur une cellule
+        function handleCellClick(e) {
+            if (!isPlaying || isShowingSequence) return;
+            
+            const cellIndex = parseInt(e.target.dataset.index);
+            playerSequence.push(cellIndex);
+            activateCell(cellIndex);
+            
+            // Vérifier si la séquence correspond
+            checkSequence();
+        }
+
+        // Vérifier la séquence du joueur
+        function checkSequence() {
+            // Vérifier chaque étape
+            for (let i = 0; i < playerSequence.length; i++) {
+                if (playerSequence[i] !== sequence[i]) {
+                    // Mauvaise réponse
+                    cells[playerSequence[i]].classList.add('wrong');
+                    wrongSound.play();
+                    gameOver();
+                    return;
+                }
+            }
+            
+            // Bonne réponse mais séquence incomplète
+            if (playerSequence.length < sequence.length) {
+                messageEl.textContent = `Continue! (${playerSequence.length}/${sequence.length})`;
+                return;
+            }
+            
+            // Séquence complète et correcte
+            correctSound.play();
+            score += level * 10;
+            scoreDisplay.textContent = score;
+            updateProgress();
+            
+            // Feedback visuel
+            cells.forEach(cell => {
+                cell.classList.add('correct');
+                setTimeout(() => cell.classList.remove('correct'), 500);
+            });
+            
+            // Vérifier si le joueur a gagné (niveau 5 complété)
+            if (level >= maxLevel) {
+                winGame();
+                return;
+            }
+            
+            // Passer au niveau suivant
+            setTimeout(() => {
+                level++;
+                levelDisplay.textContent = `${level}/${maxLevel}`;
+                messageEl.textContent = `Niveau ${level}!`;
+                startRound();
+            }, 1000);
+        }
+
+        // Mettre à jour la barre de progression
+        function updateProgress() {
+            const progress = (level / maxLevel) * 100;
+            progressBar.style.width = `${progress}%`;
+        }
+
+        // Game Over
+        function gameOver() {
+            isPlaying = false;
+            finalScoreDisplay.textContent = score;
+            gameOverScreen.classList.add('active');
+        }
+
+        // Victoire
+        function winGame() {
+            isPlaying = false;
+            winScoreDisplay.textContent = score;
+            winSound.play();
+            winScreen.classList.add('active');
+        }
+
+        // Commencer un nouveau round
+        function startRound() {
+            generateSequence();
+            messageEl.textContent = 'Regardez bien...';
+            setTimeout(() => showSequence(), 1000);
+        }
+
+        // Commencer le jeu
+        function startGame() {
+            isPlaying = true;
+            level = 1;
+            score = 0;
+            levelDisplay.textContent = `${level}/${maxLevel}`;
+            scoreDisplay.textContent = score;
+            progressBar.style.width = '0%';
+            gameOverScreen.classList.remove('active');
+            winScreen.classList.remove('active');
+            startRound();
+        }
+
+        // Événements
+        startBtn.addEventListener('click', startGame);
+        restartBtn.addEventListener('click', startGame);
+        playAgainBtn.addEventListener('click', startGame);
+        newGameBtn.addEventListener('click', startGame);
+
+        // Initialiser le jeu
+        createGrid();
+    </script>
+</body>
+</html>
