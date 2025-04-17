@@ -3,22 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mulhouse - Animation</title>
+    <title>Jeu Mobile - Personnage</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="stylesacceuil.css">
+    <link rel="stylesheet" href="stylesjardin.css">
 </head>
 <body>
     <div class="app-container">
-        <!-- Image pleine page -->
-        <div class="city-image"></div>
+        <!-- Image de fond -->
+        <div class="background-image"></div>
 
-        <!-- Contenu principal -->
-        <main class="main-content">
-            <h1 class="welcome-text">Welcome to Mulhouse</h1>
-            <a href="jardin.html" class="start-button">Start</a>
-        </main>
+        <!-- Personnage et bulle de dialogue (bulle AVANT l'image !) -->
+        <div class="character-container" id="characterContainer">
+            <div class="speech-bubble" id="speechBubble">Salut, moi c’est Lucas.</div>
+            <img src="img/personnage par defaut.png" alt="Personnage" class="character-img" id="characterImg">
+        </div>
 
         <!-- Menu Hamburger -->
         <div class="hamburger-menu" id="hamburger">
@@ -26,10 +26,6 @@
             <div class="bar"></div>
             <div class="bar"></div>
         </div>
-
-        <!-- Nuages -->
-        <div class="cloud cloud-left"></div>
-        <div class="cloud cloud-right"></div>
 
         <!-- Bouton Carte -->
         <button class="map-button"></button>
@@ -45,7 +41,6 @@
             </ul>
         </nav>
     </div>
-
-    <script src="script.js"></script>
+    <script src="dialogue.js"></script>
 </body>
 </html>

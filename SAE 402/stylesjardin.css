@@ -1,0 +1,175 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    height: 100vh;
+    font-family: 'Jersey 10', Arial, sans-serif;
+}
+
+.app-container {
+    position: relative;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Image de fond */
+.background-image {
+    position: absolute;
+    width: 100vw;
+    height: 100vh;
+    background-image: url('img/jardindessenteurs.png');
+    background-size: cover;
+    background-position: center;
+    z-index: 1;
+}
+
+/* Personnage et bulle */
+.character-container {
+    position: absolute;
+    left: 50%;
+    bottom: -20px; /* Le personnage descend un peu sous le bas de l'écran */
+    transform: translateX(-50%);
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    pointer-events: none; /* On active après les dialogues */
+}
+
+.character-img {
+    width: 120vw;      /* Personnage géant, déborde sur les côtés */
+    max-width: 120vw;
+    height: auto;
+    user-select: none;
+    z-index: 10;
+    pointer-events: none;
+    transition: transform 0.2s cubic-bezier(.4,2,.6,1); /* Animation fluide pour le scale */
+}
+
+/* Bulle collée à la tête du perso */
+.speech-bubble {
+    position: relative;
+    left: 0;
+    bottom: 0;
+    transform: none;
+    margin-bottom: -38px; /* Ajuste cette valeur pour coller/chevaucher la bulle sur la tête */
+    min-width: 60vw;
+    max-width: 90vw;
+    background: #fff;
+    color: #222;
+    border-radius: 32px;
+    padding: 18px 10px;
+    font-size: 2em;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    text-align: center;
+    cursor: pointer;
+    z-index: 20;
+    pointer-events: auto;
+    transition: opacity 0.2s;
+}
+
+.speech-bubble::after {
+    content: "";
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 14px 16px 0 16px;
+    border-style: solid;
+    border-color: #fff transparent transparent transparent;
+    filter: drop-shadow(0 3px 3px rgba(0,0,0,0.1));
+}
+
+/* Menu Hamburger */
+.hamburger-menu {
+    position: fixed;
+    top: 16px;
+    left: 16px;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    z-index: 1001;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.hamburger-menu .bar {
+    height: 3px;
+    width: 100%;
+    background-color: white;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hamburger-menu.active .bar:nth-child(1) {
+    transform: translateY(11px) rotate(45deg);
+}
+.hamburger-menu.active .bar:nth-child(2) {
+    opacity: 0;
+}
+.hamburger-menu.active .bar:nth-child(3) {
+    transform: translateY(-11px) rotate(-45deg);
+}
+
+/* Bouton Carte */
+.map-button {
+    position: fixed;
+    bottom: 16px;
+    right: 16px;
+    width: 56px;
+    height: 56px;
+    background-color: rgba(48, 195, 213, 0.8);
+    background-image: url('img/iconmap.png');
+    background-size: 60%;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    border: none;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    z-index: 100;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.map-button:hover {
+    transform: scale(1.1);
+}
+
+/* Menu latéral */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 220px;
+    height: 100vh;
+    background-color: rgba(52, 73, 94, 0.95);
+    transition: all 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+.sidebar.active {
+    left: 0;
+}
+.menu-items {
+    list-style: none;
+    padding: 60px 10px 10px;
+}
+.menu-item {
+    padding: 14px 0;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.menu-item:hover {
+    background-color: rgba(44, 62, 80, 0.7);
+}
+.menu-item a {
+    color: white;
+    text-decoration: none;
+    display: block;
+}
