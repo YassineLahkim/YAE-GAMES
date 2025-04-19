@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -33,9 +34,13 @@
         }
 
         .trapHole {
-            background-color: #f44336;
-            box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
-            border: 3px solid #d32f2f;
+            width: 44px;
+            /* 22px radius × 2 */
+            height: 44px;
+            /* Même valeur que width */
+            border: 2px solid #d32f2f;
+            /* Bordure légèrement plus fine */
+            background-color:#ff3b3b;
         }
 
         #ui {
@@ -66,6 +71,50 @@
             width: 80%;
             max-width: 400px;
             backdrop-filter: blur(5px);
+        }
+
+        @keyframes victoryAnimation {
+            0% {
+                transform: translate(-50%, -50%) scale(1);
+                filter: brightness(1);
+            }
+
+            50% {
+                transform: translate(-50%, -50%) scale(1.2);
+                filter: brightness(1.5);
+            }
+
+            100% {
+                transform: translate(-50%, -50%) scale(1);
+                filter: brightness(1);
+            }
+        }
+
+        #victoryMessage {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 0, 0, 0.85);
+            color: white;
+            padding: 30px;
+            border-radius: 15px;
+            text-align: center;
+            display: none;
+            pointer-events: auto;
+            z-index: 100;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            width: 80%;
+            max-width: 400px;
+            backdrop-filter: blur(5px);
+            animation: victoryAnimation 1s infinite;
+        }
+
+        #victoryMessage h2 {
+            margin: 0 0 20px 0;
+            font-size: 24px;
+            color: #FFEB3B;
         }
 
         #message h2 {
@@ -104,7 +153,7 @@
             opacity: 0;
         }
 
-        .pulse:hover {
+        .pulSE:hover {
             transform: scale(1.05);
         }
 
@@ -115,12 +164,16 @@
         }
 
         @keyframes shake {
-            0%, 100% {
+
+            0%,
+            100% {
                 transform: translateX(0);
             }
+
             25% {
                 transform: translateX(-5px);
             }
+
             75% {
                 transform: translateX(5px);
             }
@@ -138,20 +191,24 @@
         }
 
         .progress-container {
-            width: 80%;
-            max-width: 300px;
-            height: 20px;
+            width: 60%;
+            /* Réduire la largeur */
+            max-width: 200px;
+            /* Réduire la largeur maximale */
+            height: 10px;
+            /* Réduire la hauteur */
             background-color: #333;
-            border-radius: 10px;
-            margin: 15px 0;
+            border-radius: 5px;
+            /* Réduire le rayon des coins */
+            margin: 10px 0;
+            /* Réduire les marges */
             overflow: hidden;
-            opacity: 0;
-            transform: translateY(20px);
         }
 
         .progress-bar {
             height: 100%;
-            border-radius: 10px;
+            border-radius: 5px;
+            /* Réduire le rayon des coins */
             background: linear-gradient(90deg, #4CAF50, #8BC34A);
             width: 0%;
             transition: width 0.5s ease-out;
@@ -178,6 +235,7 @@
                 opacity: 0;
                 transform: translateY(-50px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -189,6 +247,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -200,10 +259,12 @@
                 transform: scale(0);
                 opacity: 0;
             }
+
             80% {
                 transform: scale(1.1);
                 opacity: 0.8;
             }
+
             100% {
                 transform: scale(1);
                 opacity: 1;
@@ -215,6 +276,7 @@
                 opacity: 0;
                 transform: translateY(20px);
             }
+
             100% {
                 opacity: 1;
                 transform: translateY(0);
@@ -225,9 +287,11 @@
             0% {
                 transform: scale(1);
             }
+
             50% {
                 transform: scale(1.05);
             }
+
             100% {
                 transform: scale(1);
             }
@@ -237,25 +301,17 @@
             animation: pulse 2s infinite;
         }
 
-        #ballPreview {
-            width: 40px;
-            height: 40px;
-            background: radial-gradient(circle at 30% 30%, #FF5722, #E64A19);
-            border-radius: 50%;
-            position: absolute;
-            box-shadow: 0 0 20px rgba(255, 87, 34, 0.7);
-            display: none;
-        }
-
         @keyframes ballIntro {
             0% {
                 transform: translate(-50%, -50%) scale(0);
                 opacity: 0;
             }
+
             50% {
                 transform: translate(-50%, -50%) scale(1.2);
                 opacity: 1;
             }
+
             100% {
                 transform: translate(-50%, -50%) scale(1);
                 opacity: 1;
@@ -278,15 +334,26 @@
         }
 
         #hintButton {
-            padding: 5px 10px;
-            margin-top: 10px;
-            font-size: 14px;
+            padding: 3px 6px;
+            /* Réduit le padding */
+            margin-top: 5px;
+            /* Réduit la marge supérieure */
+            font-size: 12px;
+            /* Réduit la taille de la police */
             background-color: #ffffff;
             color: rgb(12, 12, 12);
             border: none;
-            border-radius: 15px;
+            border-radius: 10px;
+            /* Réduit légèrement le rayon des bordures */
             cursor: pointer;
-            display: block;
+            display: inline-block;
+            /* Change display à inline-block */
+            max-width: 100px;
+            /* Définit une largeur maximale */
+            text-align: center;
+            /* Centre le texte */
+            box-sizing: border-box;
+            /* Inclut le padding et la bordure dans la largeur totale */
         }
 
         #hintText {
@@ -301,16 +368,19 @@
         }
 
         #hintButton:hover {
-            box-shadow: 0 5px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 3px 5px rgba(0, 0, 0, 0.3);
+            /* Réduit légèrement l'ombre */
         }
 
         @keyframes goldPulse {
             0% {
                 box-shadow: 0 0 10px gold;
             }
+
             50% {
                 box-shadow: 0 0 30px gold;
             }
+
             100% {
                 box-shadow: 0 0 10px gold;
             }
@@ -364,9 +434,11 @@
                 transform: scale(0.5);
                 opacity: 0;
             }
+
             50% {
                 transform: scale(1.2);
             }
+
             100% {
                 transform: scale(1);
                 opacity: 1;
@@ -379,61 +451,54 @@
             }
         }
 
-        #recalibrateBtn {
-            position: fixed;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 1000;
-            padding: 8px 16px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            display: none;
-        }
-
         #pauseButton {
             position: absolute;
             top: 20px;
             right: 20px;
             padding: 10px 20px;
-            width: auto; /* Ensure the button has a width */
-            height: auto; /* Ensure the button has a height */
+            width: auto;
+            /* Ensure the button has a width */
+            height: auto;
+            /* Ensure the button has a height */
             background-color: #ff3b3b;
             color: white;
             border: none;
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            box-shadow: 0 0 10px rgba(0,0,0,0.2);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             transition: 0.3s;
-            z-index: 1000; /* Ensure it's above other elements */
+            z-index: 1000;
+            /* Ensure it's above other elements */
         }
 
         #pauseButton:hover {
             background-color: #e60000;
         }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+
 </head>
+
 <body>
     <canvas id="gameCanvas"></canvas>
     <div id="targetHole" class="hole"></div>
     <div id="trapHole1" class="hole trapHole"></div>
     <div id="trapHole2" class="hole trapHole"></div>
     <div id="trapHole3" class="hole trapHole"></div>
-    <div id="ballPreview"></div>
     <div id="countdown"></div>
-    <button id="recalibrateBtn">Recalibrate</button>
     <button id="pauseButton">PAUSE</button>
 
     <div id="ui">
-        <div>Score: <span id="score">0</span></div>
-        <div>Lives: <span id="lives"></span></div>
-        <div>Success: <span id="success">0</span>/3</div>
+        <div>⭐ Score: <span id="score">0</span></div>
+        <div>❤️ Lives: <span id="lives"></span></div>
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar"></div>
+        </div>
         <div id="hintButton" style="display: block; text-align:center;">Hint</div>
         <div id="hintText" style="display: none; margin-top: 10px; color: rgb(235, 255, 53); font-size: 16px;">
-            Cheat code: Tap Tap Tap Tap
+            2 – pause – 2
         </div>
     </div>
 
@@ -451,7 +516,8 @@
             <div class="progress-bar" id="progressBar"></div>
         </div>
         <button id="startButton" class="pulse">Start</button>
-        <button id="permissionButton" style="background-color: #2196F3;">
+        <button id="permissionButton"
+            style="background-color: #2196F3; padding: 10px; border: none; border-radius: 4px; color: white;">
             Enable Tilt
         </button>
     </div>
@@ -459,6 +525,45 @@
     <div id="cheatNotification">Cheat code activated!</div>
 
     <script>
+
+        let audioContext;
+        let proximityOscillator;
+        let proximityGain;
+        let isAudioSetup = false;
+        const MAX_FREQ = 600;  // Fréquence max réduite (était 800)
+        const MIN_FREQ = 200;
+        const MAX_VOLUME = 0.1; // Volume max réduit à 10%
+
+        function setupAudio() {
+            if (isAudioSetup) return;
+
+            try {
+                audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+                // Oscillateur avec onde plus douce (triangle au lieu de sine)
+                proximityOscillator = audioContext.createOscillator();
+                proximityOscillator.type = 'triangle'; // Son plus doux que 'sine'
+
+                // Filtre pour adoucir les aigus
+                const filter = audioContext.createBiquadFilter();
+                filter.type = "lowpass";
+                filter.frequency.value = 2000;
+
+                proximityGain = audioContext.createGain();
+                proximityGain.gain.value = 0;
+
+                // Chaînage avec le filtre
+                proximityOscillator.connect(filter);
+                filter.connect(proximityGain);
+                proximityGain.connect(audioContext.destination);
+
+                proximityOscillator.start();
+                isAudioSetup = true;
+            } catch (e) {
+                console.error("Erreur audio:", e);
+            }
+        }
+
         // DOM Elements
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
@@ -470,9 +575,7 @@
         ];
         const uiScore = document.getElementById('score');
         const uiLives = document.getElementById('lives');
-        const uiSuccess = document.getElementById('success');
         const progressBar = document.getElementById('progressBar');
-        const progressContainer = document.getElementById('progressContainer');
         const message = document.getElementById('message');
         const resultMessage = document.getElementById('resultMessage');
         const restartButton = document.getElementById('restartButton');
@@ -483,18 +586,17 @@
         const orientationStatus = document.getElementById('orientationStatus');
         const gameTitle = document.getElementById('gameTitle');
         const gameSubtitle = document.getElementById('gameSubtitle');
-        const ballPreview = document.getElementById('ballPreview');
         const cheatNotification = document.getElementById('cheatNotification');
         const hintButton = document.getElementById('hintButton');
         const hintText = document.getElementById('hintText');
         const countdown = document.getElementById('countdown');
-        const recalibrateBtn = document.getElementById('recalibrateBtn');
         const pauseButton = document.getElementById('pauseButton');
+
 
         // Dimensions
         let width, height;
         const ballRadius = 20;
-        const holeRadius = 30;
+        const holeRadius = 22; // 22px au lieu de 30px (taille réduite de ~25%)
 
         // Physics
         const friction = 0.98;
@@ -528,6 +630,70 @@
         const cheatTapPattern = [2, 2]; // 2-2
         let lastTapTime = 0;
         let hintShown = false;
+
+        function activateAudio() {
+            if (!isAudioSetup || audioContext.state === 'running') return;
+
+            audioContext.resume().then(() => {
+                proximityGain.gain.linearRampToValueAtTime(MAX_VOLUME / 2, audioContext.currentTime + 0.5); // Montée progressive
+            });
+        }
+
+        function updateProximitySound() {
+            if (!isAudioSetup || !gameActive || audioContext.state !== 'running') return;
+
+            const target = holePositions.find(hole => hole.isTarget);
+            if (!target) return;
+
+            const dx = ball.x - target.x;
+            const dy = ball.y - target.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            const maxDist = Math.max(width, height);
+
+            // Courbe logarithmique pour un changement plus progressif
+            const normalizedDist = Math.min(distance / maxDist, 1);
+            const freq = MIN_FREQ + (MAX_FREQ - MIN_FREQ) * Math.log(1 + 2 * normalizedDist) / Math.log(3);
+
+            proximityOscillator.frequency.setValueAtTime(freq, audioContext.currentTime);
+
+            // Volume avec atténuation progressive
+            const volume = MAX_VOLUME * (1 - Math.pow(normalizedDist, 0.7));
+            proximityGain.gain.setTargetAtTime(
+                volume,
+                audioContext.currentTime,
+                0.1
+            );
+        }
+
+        function playHoleSound(isTarget) {
+            if (!isAudioSetup || audioContext.state !== 'running') return;
+
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+
+                // Configuration plus douce
+                osc.type = 'triangle'; // Onde plus douce
+                osc.frequency.value = isTarget ? 500 : 250; // Fréquences réduites
+                gain.gain.value = 0.2; // Volume réduit
+
+                // Filtre anti-aigus stridents
+                const filter = audioContext.createBiquadFilter();
+                filter.type = "lowpass";
+                filter.frequency.value = 1500;
+
+                osc.connect(filter);
+                filter.connect(gain);
+                gain.connect(audioContext.destination);
+
+                osc.start();
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.3);
+                osc.stop(audioContext.currentTime + 0.5);
+            } catch (e) {
+                console.error("Erreur son trou:", e);
+            }
+        }
+
 
         function showCheatNotification() {
             cheatNotification.style.opacity = 1;
@@ -653,25 +819,45 @@
             checkOrientationSupport();
             playIntroAnimation();
 
+            document.addEventListener('click', function initAudio() {
+                setupAudio();
+                // Activer l'audio quand l'utilisateur démarre le jeu
+                startButton.addEventListener('click', activateAudio);
+                // Activer aussi au toucher pour mobile
+                canvas.addEventListener('touchstart', activateAudio, { once: true });
+                document.removeEventListener('click', initAudio);
+            }, { once: true });
+
             document.addEventListener('keydown', (e) => {
                 checkKonamiCode(e.key);
             });
 
             hintButton.addEventListener('click', showHint);
             canvas.addEventListener('touchstart', handleTap);
-            recalibrateBtn.addEventListener('click', () => {
-                isCalibrated = false;
-                showCalibrationMessage("Recalibration complete!");
-            });
 
             pauseButton.addEventListener('click', () => {
                 if (gameActive) {
                     gameActive = false;
                     pauseButton.textContent = 'RESUME';
+
+                    // COUPURE NETTE DU SON (pas juste une baisse)
+                    if (proximityGain) {
+                        proximityGain.gain.cancelScheduledValues(audioContext.currentTime);
+                        proximityGain.gain.setValueAtTime(0, audioContext.currentTime);
+                    }
                 } else {
                     gameActive = true;
                     pauseButton.textContent = 'PAUSE';
-                    startCountdown(); // Start countdown on resume
+                    startCountdown();
+
+                    // Réactivation progressive si l'audio est actif
+                    if (proximityGain && audioContext.state === 'running') {
+                        proximityGain.gain.setTargetAtTime(
+                            MAX_VOLUME / 2,
+                            audioContext.currentTime,
+                            0.3
+                        );
+                    }
                 }
             });
 
@@ -714,22 +900,6 @@
                 orientationStatus.style.transition = "opacity 1s 0.5s";
             }, 1200);
 
-            setTimeout(() => {
-                ballPreview.style.display = "block";
-                ballPreview.style.left = "50%";
-                ballPreview.style.top = "70%";
-                ballPreview.style.transform = "translate(-50%, -50%)";
-                ballPreview.style.animation = "ballIntro 1s ease-out forwards";
-
-                setTimeout(() => {
-                    ballPreview.style.transition = "all 0.5s cubic-bezier(0.5, -0.5, 0.5, 1.5)";
-                    ballPreview.style.top = "65%";
-
-                    setTimeout(() => {
-                        ballPreview.style.top = "70%";
-                    }, 500);
-                }, 1200);
-            }, 1500);
         }
 
         function resizeCanvas() {
@@ -804,6 +974,9 @@
         function startGame() {
             startScreen.style.opacity = 0;
             startScreen.style.transition = "opacity 0.8s ease-out";
+            if (isAudioSetup && audioContext.state !== 'running') {
+                activateAudio();
+            }
 
             // Start countdown
             startCountdown();
@@ -847,7 +1020,6 @@
 
             if (usingOrientation && orientationPermissionGranted) {
                 window.addEventListener('deviceorientation', handleOrientation);
-                recalibrateBtn.style.display = 'block';
             }
 
             if (!isMobile) {
@@ -1035,6 +1207,9 @@
         function update() {
             if (!gameActive) return;
 
+            updateProximitySound(); // <-- AJOUT
+
+
             ball.vx *= friction;
             ball.vy *= friction;
 
@@ -1070,33 +1245,50 @@
 
         function checkHoleCollisions() {
             for (const hole of holePositions) {
-                const dx = ball.x - hole.x;
-                const dy = ball.y - hole.y;
+                // Position ACTUELLE du trou (même s'il est en mouvement)
+                let currentHoleX, currentHoleY;
+
+                if (hole.isTarget) {
+                    // Trou noir (statique)
+                    currentHoleX = hole.x;
+                    currentHoleY = hole.y;
+                } else {
+                    // Trou rouge (mobile) - On récupère sa position réelle à l'écran
+                    const trapIndex = holePositions.indexOf(hole) - 1; // -1 car le 1er élément est la cible
+                    const trapElement = trapHoles[trapIndex];
+                    const rect = trapElement.getBoundingClientRect();
+                    currentHoleX = rect.left + rect.width / 2;
+                    currentHoleY = rect.top + rect.height / 2;
+                }
+
+                // Calcul de distance entre CENTRE de la balle et CENTRE du trou
+                const dx = ball.x - currentHoleX;
+                const dy = ball.y - currentHoleY;
                 const distance = Math.sqrt(dx * dx + dy * dy);
 
-                if (distance < holeRadius) {
+                // Collision si DISTANCE < (Rayon balle + Rayon trou)
+                if (distance < (ballRadius + holeRadius)) { // Pas de "-5", collision précise
                     if (hole.isTarget) {
+                        playHoleSound(true);
                         score += 10;
                         successes++;
                         updateUI();
-                        document.body.classList.add('shake');
-                        setTimeout(() => document.body.classList.remove('shake'), 300);
 
                         if (successes >= successesNeeded) {
+                            playVictorySound();
                             gameOver(true);
                         } else {
                             placeHoles();
                             resetBall();
                         }
                     } else {
+                        playHoleSound(false);
                         lives--;
                         updateUI();
 
                         if (lives <= 0) {
                             gameOver(false);
                         } else {
-                            document.body.classList.add('shake');
-                            setTimeout(() => document.body.classList.remove('shake'), 300);
                             resetBall();
                         }
                     }
@@ -1106,24 +1298,57 @@
         }
 
         function gameOver(isWin) {
+            if (proximityGain) proximityGain.gain.value = 0;
             gameActive = false;
-            resultMessage.textContent = isWin ? "Congratulations! You won! " : "Game Over!";
-            if (cheatActivated) {
-                resultMessage.textContent += " (Cheat activated)";
+            if (isWin) {
+                resultMessage.textContent = "Congratulations! You won!";
+                if (cheatActivated) {
+                    resultMessage.textContent += " (Cheat activated)";
+                }
+                message.id = 'victoryMessage'; // Change the ID to apply the victory animation
+                message.style.display = 'block'; // Ensure the message is displayed
+                playVictorySound(); // Play the victory sound
+            } else {
+                resultMessage.textContent = "Game Over!";
+                message.style.display = 'block'; // Ensure the message is displayed
             }
-            message.style.display = 'block';
-            recalibrateBtn.style.display = 'none';
+        }
+
+        function playVictorySound() {
+            const audio = new Audio('victory.mp3');
+            audio.play();
+            if (!isAudioSetup || audioContext.state !== 'running') return;
+
+            try {
+                const osc = audioContext.createOscillator();
+                const gain = audioContext.createGain();
+                osc.type = 'triangle';
+                osc.frequency.value = 440;
+                gain.gain.value = 0.5;
+
+                osc.connect(gain);
+                gain.connect(audioContext.destination);
+                osc.start();
+
+                osc.frequency.exponentialRampToValueAtTime(880, audioContext.currentTime + 0.5);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 1);
+                osc.stop(audioContext.currentTime + 1);
+            } catch (e) {
+                console.error("Erreur son victoire:", e);
+            }
+
         }
 
         function updateUI() {
             uiScore.textContent = score;
-            uiSuccess.textContent = `${successes}/${successesNeeded}`;
-            progressBar.style.width = `${(successes / successesNeeded) * 100}%`;
-
             uiLives.innerHTML = '';
             for (let i = 0; i < lives; i++) {
                 uiLives.innerHTML += '<span class="heart">❤</span>';
             }
+
+            // Mettre à jour la barre de progression
+            const progressBar = document.getElementById('progressBar');
+            progressBar.style.width = `${(successes / successesNeeded) * 100}%`;
         }
 
         function draw() {
@@ -1156,4 +1381,5 @@
         init();
     </script>
 </body>
+
 </html>
