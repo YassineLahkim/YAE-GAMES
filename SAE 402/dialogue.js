@@ -4,13 +4,13 @@ preloadedImg.src = "img/personnage peur.png"; // Mets ici le chemin de ta nouvel
 
 // === Gestion des dialogues ===
 const dialogues = [
-    "Salut, moi c’est Lucas.",
-    "J’ai 15 ans, et j’adore partir à l’aventure pour résoudre des mystères.",
-    "On dit que ce jardin cache bien des secrets… et justement, j’ai entendu une histoire étrange.",
-    "Un tableau aurait disparu du musée du patrimoine de Mulhouse.",
-    "Personne ne sait ce qu’il est devenu, mais la dernière fois qu’on l’a aperçu, c’était ici, au Jardin des Senteurs.",
-    "T’es partant pour m’aider à fouiller un peu ?",
-    "J’ai le pressentiment qu’on va découvrir quelque chose d’intéressant…"
+    "Hi, I'm Lucas.",
+    "I'm 15, and I love going on adventures to solve mysteries.",
+    "They say this garden hides a lot of secrets... and I've heard a strange story. ",
+    "A painting has disappeared from the Mulhouse Heritage Museum",
+    "Nobody knows what happened to it, but the last time it was seen was here, in the Jardin des Senteurs",
+    "Are you up for helping me rummage around?",
+    "I've got a hunch we're going to find something interesting..."
 ];
 
 let dialogueIndex = 0;
@@ -67,9 +67,9 @@ function nextDialogue() {
 
 // === Dialogues spéciaux lumière ===
 const lightDialogues = [
-    "Attends… t’as vu ça ?",
-    "Y a une lumière là-bas… juste entre les buissons.",
-    "Viens, aide-moi… clique dessus pour voir ce que c’est."
+    "Wait... did you see that?",
+    "There's a light over there... just between the bushes.",
+    "Come on, help me... click on it to see what it is."
 ];
 let lightDialogueIndex = 0;
 let showingLightDialogues = false;
@@ -88,7 +88,7 @@ function showLightDialogue(index) {
 }
 
 // Avance le dialogue sur tout clic écran (hors menus)
-document.addEventListener('click', function(e) {
+document.addEventListener('click', function (e) {
     if (e.target.closest('.hamburger-menu') || e.target.closest('.sidebar') || e.target.closest('.map-button')) {
         return;
     }
@@ -117,7 +117,7 @@ showDialogue(0);
 // === Menu hamburger ===
 const hamburger = document.getElementById('hamburger');
 const sidebar = document.getElementById('sidebar');
-hamburger.addEventListener('click', function(e) {
+hamburger.addEventListener('click', function (e) {
     hamburger.classList.toggle('active');
     sidebar.classList.toggle('active');
     e.stopPropagation();
@@ -204,8 +204,8 @@ function enableCharacterMovement() {
 
     // Clique sur la lumière : redirige vers une nouvelle page
     if (lightDiscovery) {
-        lightDiscovery.onclick = function() {
-            window.location.href = "nouvellepage.html"; // Mets ici le nom de ta nouvelle page
+        lightDiscovery.onclick = function () {
+            window.location.href = "game1.html"; // Mets ici le nom de ta nouvelle page
         };
     }
 }

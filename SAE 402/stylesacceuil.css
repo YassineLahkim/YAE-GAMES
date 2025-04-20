@@ -89,6 +89,7 @@ body {
     font-family: 'Jersey 10', monospace;
     text-transform: uppercase;
     letter-spacing: 2px;
+    text-decoration: none;
 }
 
 .start-button:hover {
