@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>The Garden Mystery</title>
+    <title>Win!</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
@@ -42,11 +42,13 @@
             display: flex;
             justify-content: space-between;
             align-items: flex-end;
-            margin-bottom: 10vh;
+            margin-top: 40vh; /* Déplacé plus bas */
             height: 40vh;
             width: 100%;
             gap: 5px;
             position: relative;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
         }
 
         .character {
@@ -120,13 +122,6 @@
             transform: translateY(0);
         }
 
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10vh;
-            color: #ffffff;
-            padding: 0 10px;
-        }
-
         #startButton {
             padding: 12px 25px;
             font-size: 1.3rem;
@@ -158,52 +153,100 @@
             animation: fadeIn 1s ease-in-out forwards;
         }
 
-        @keyframes shake {
-            0% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            50% { transform: translateX(5px); }
-            75% { transform: translateX(-5px); }
-            100% { transform: translateX(0); }
-        }
-
-        .shake {
-            animation: shake 0.5s;
+        @keyframes sparkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 1; }
         }
 
         @media (max-height: 600px) {
             .characters {
                 height: 35vh;
-                margin-bottom: 5vh;
+                margin-top: 30vh; /* Déplacé plus bas */
             }
-            
+
             #lucasCharacter img {
                 height: 25vh;
                 max-height: 200px;
             }
-            
+
             #mysteriousCharacter img {
                 height: 25vh;
                 max-height: 200px;
             }
-            
+
             .speech-bubble {
                 font-size: 1rem;
                 padding: 8px;
                 min-height: 50px;
             }
-            
-            h1 {
-                font-size: 1.5rem;
-                margin-bottom: 2vh;
-            }
+        }
+
+        .painting {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 80%;
+            max-width: 600px;
+            opacity: 0;
+            box-shadow: 0 0 30px rgba(255, 215, 0, 1), 0 0 60px rgba(255, 215, 0, 0.8); /* Illumination dorée intense */
+            transition: all 1s ease-in-out;
+        }
+
+        .painting.small {
+            width: 50%;
+            max-width: 300px;
+            top: 35%; /* Déplacé plus haut */
+            box-shadow: 0 0 15px rgba(255, 215, 0, 0.5); /* Illumination dorée réduite */
+        }
+
+        .painting img {
+            width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 215, 0, 0.8);
+            border-radius: 50%;
+            animation: sparkle 2s infinite;
+        }
+
+        .sparkle:nth-child(1) { top: -10px; left: 20%; animation-delay: 0s; }
+        .sparkle:nth-child(2) { top: -20px; left: 50%; animation-delay: 0.5s; }
+        .sparkle:nth-child(3) { top: -30px; left: 80%; animation-delay: 1s; }
+        .sparkle:nth-child(4) { top: -40px; left: 30%; animation-delay: 1.5s; }
+        .sparkle:nth-child(5) { top: -50px; left: 70%; animation-delay: 2s; }
+
+        .win-text {
+            position: absolute;
+            top: 10%; /* Positionné plus haut */
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 6rem; /* Texte plus grand */
+            color: rgba(255, 215, 0, 1);
+            text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6);
+            z-index: 30; /* Assure que le texte est toujours au-dessus du tableau */
         }
     </style>
 </head>
 <body>
     <div class="container fade-in">
-        <h1>The Garden Mystery</h1>
-        
-        <div class="characters">
+        <div class="win-text" id="winText">WIN!</div>
+
+        <div class="painting" id="painting">
+            <img src="img/ChatGPT Image 22 avr. 2025, 12_23_23.png" alt="Tableau mystérieux">
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+            <div class="sparkle"></div>
+        </div>
+
+        <div class="characters" id="characters">
             <div class="character" id="lucasCharacter">
                 <div class="speech-bubble left" id="lucasSpeech"></div>
                 <img src="img/personnage par defaut.png" alt="Lucas">
@@ -214,47 +257,27 @@
                 <img src="img/ChatGPT Image 21 avr. 2025, 19_43_10.png" alt="Personnage mystérieux">
             </div>
         </div>
-        
-        <button id="startButton">Start the adventure</button>
+
+        <button id="startButton">Go to the next game</button>
     </div>
+
+    <!-- Ajoutez l'élément audio ici -->
+    <audio id="victorySound" src="victory.mp3"></audio>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const dialogues = [
                 {
-                    speaker: 'lucas',
-                    text: 'Sir... who are you?',
-                    action: function() {
-                        document.getElementById('lucasCharacter').classList.add('shake');
-                    }
+                    speaker: 'mysterious',
+                    text: 'Well done! You found the painting...'
                 },
                 {
                     speaker: 'mysterious',
-                    text: 'I am the Keeper of the Secrets of this garden...'
+                    text: 'Now, proceed to the next puzzle to uncover more secrets...'
                 },
                 {
                     speaker: 'lucas',
-                    text: 'The keeper...? I am  looking for a work of art here...'
-                },
-                {
-                    speaker: 'mysterious',
-                    text: ' If you want to find the lost work, you\'ll first have to solve my game...hidden here...'
-                },
-                {
-                    speaker: 'lucas',
-                    text: 'A game? How does it work?'
-                },
-                {
-                    speaker: 'mysterious',
-                    text: 'You\'ll have to guide a ball towards the black hole, avoiding the red traps!'
-                },
-                {
-                    speaker: 'mysterious',
-                    text: 'Reach the black hole 3 times to unlock the secret of the garden...'
-                },
-                {
-                    speaker: 'lucas',
-                    text: 'I\'m ready! Show me the game!',
+                    text: 'Alright! Let\'s go!',
                     action: function() {
                         document.getElementById('startButton').classList.add('show');
                     }
@@ -266,6 +289,9 @@
             const startButton = document.getElementById('startButton');
             const lucasCharacter = document.getElementById('lucasCharacter');
             const mysteriousCharacter = document.getElementById('mysteriousCharacter');
+            const painting = document.getElementById('painting');
+            const characters = document.getElementById('characters');
+            const victorySound = document.getElementById('victorySound');
 
             let currentDialogue = 0;
             let isTyping = false;
@@ -281,7 +307,7 @@
                 // Reset animations and clear any ongoing typing
                 lucasCharacter.classList.remove('shake');
                 if (typingInterval) clearInterval(typingInterval);
-                
+
                 // Execute action if exists
                 if (dialogue.action) {
                     dialogue.action();
@@ -333,14 +359,26 @@
             startButton.addEventListener('click', function() {
                 document.body.classList.add('hidden');
                 setTimeout(function() {
-                    window.location.href = "accueil.html";
+                    window.location.href = "jeu2.html";
                 }, 300);
             });
 
-            // Start first dialogue
+            // Start painting animation
             setTimeout(() => {
-                showDialogue();
+                painting.style.opacity = '1';
+                setTimeout(() => {
+                    painting.classList.add('small'); // Réduire et déplacer le tableau
+                    setTimeout(() => {
+                        characters.style.opacity = '1'; // Afficher les personnages
+                        setTimeout(() => {
+                            showDialogue(); // Démarrer le dialogue
+                        }, 1000);
+                    }, 1000);
+                }, 2000);
             }, 800);
+
+            // Jouer le son de victoire
+            victorySound.play();
         });
     </script>
 </body>

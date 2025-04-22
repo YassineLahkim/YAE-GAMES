@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Ball Master</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            background: url('/img/fond.png') no-repeat center center fixed;
+            background-size: cover;
+            font-family: Arial, sans-serif;
+            touch-action: none;
+        }
+
+        #startScreen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: white;
+            text-align: center;
+            z-index: 200;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        #gameTitle {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #FF5722;
+            text-shadow: 0 0 10px rgba(255, 87, 34, 0.7);
+            opacity: 0;
+            transform: translateY(-50px);
+            animation: titleEnter 1s ease-out forwards;
+        }
+
+        #gameSubtitle {
+            font-size: 1.2rem;
+            margin-bottom: 15px;
+            line-height: 1.5;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: subtitleEnter 0.8s ease-out forwards;
+        }
+
+        .control-info {
+            font-size: 1rem;
+            margin: 15px 0;
+            opacity: 0;
+            animation: fadeIn 1s ease-out forwards;
+        }
+
+        .btn-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 20px;
+            width: 80%;
+            max-width: 220px;
+        }
+
+        .game-btn {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: #FF5722;
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s;
+            transform: scale(0);
+            opacity: 0;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            animation: buttonEnter 0.6s ease-out forwards;
+        }
+
+        .normal-btn {
+            animation-delay: 0.4s;
+        }
+
+        .accessibility-btn {
+            animation-delay: 0.6s;
+        }
+
+        .game-btn:hover {
+            transform: scale(1.05) !important;
+            background-color: #E64A19;
+        }
+
+        @keyframes titleEnter {
+            0% { opacity: 0; transform: translateY(-50px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes subtitleEnter {
+            0% { opacity: 0; transform: translateY(20px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes buttonEnter {
+            0% { transform: scale(0); opacity: 0; }
+            80% { transform: scale(1.1); opacity: 0.8; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="startScreen">
+        <h1 id="gameTitle">Ball Master</h1>
+        <p id="gameSubtitle">Reach the black hole 3 times to win!</p>
+        
+        <div class="control-info">
+            <p>📱 Tilt your phone<br><br>or touch the screen to control</p>
+        </div>
+
+        <div class="btn-container">
+            <button class="game-btn normal-btn" onclick="window.location.href='jeu.html'">
+                Standard Mode
+            </button>
+
+            <button class="game-btn accessibility-btn" onclick="window.location.href='jeu1.html'">
+                Accessible Mode
+            </button>
+
+            
+        </div>
+        <button id="permissionButton"
+            style="background-color: #2196F3; margin-top: 30px; padding: 10px; border: none; border-radius: 4px; color: white;">
+            Enable Tilt
+        </button>
+        
+
+               
+    <div id="orientationStatus" style="margin-top: 20px;"></div>
+    </div> 
+
+<script>
+const permissionButton = document.getElementById('permissionButton');
+const orientationStatus = document.getElementById('orientationStatus');
+let usingOrientation = false;
+let orientationPermissionGranted = false;
+
+// Vérifie le support de l'orientation
+function checkOrientationSupport() {
+    if (window.DeviceOrientationEvent) {
+        if (typeof DeviceOrientationEvent.requestPermission === 'function') {
+            // iOS 13+ nécessite une permission
+            permissionButton.style.display = 'block';
+            permissionButton.addEventListener('click', requestOrientationPermission);
+            orientationStatus.textContent = "Tilt is not enabled";
+        } else {
+            // Android et autres navigateurs
+            usingOrientation = true;
+            orientationStatus.textContent = "Tilt control available";
+            permissionButton.style.display = 'none';
+        }
+    } else {
+        orientationStatus.textContent = "Your device does not support tilt";
+        permissionButton.style.display = 'none';
+    }
+}
+
+// Demande la permission pour l'orientation (iOS)
+function requestOrientationPermission() {
+    DeviceOrientationEvent.requestPermission()
+        .then(response => {
+            if (response === 'granted') {
+                usingOrientation = true;
+                orientationPermissionGranted = true;
+                permissionButton.textContent = "Tilt Enabled";
+                permissionButton.style.backgroundColor = "#4CAF50";
+                orientationStatus.textContent = "Tilt control enabled!";
+                
+                // Stocker en localStorage pour ne pas redemander
+                localStorage.setItem('tiltPermission', 'granted');
+                
+                // Démarrer le suivi de l'orientation
+                window.addEventListener('deviceorientation', handleOrientation);
+            } else {
+                permissionButton.textContent = "Enable Tilt (Denied)";
+                permissionButton.style.backgroundColor = "#f44336";
+                orientationStatus.textContent = "Permission denied - Use touch";
+            }
+        })
+        .catch(error => {
+            console.error("Permission error:", error);
+            permissionButton.textContent = "Enable Tilt (Error)";
+            permissionButton.style.backgroundColor = "#f44336";
+            orientationStatus.textContent = "Activation error - Use touch";
+        });
+}
+
+// Vérifie si la permission a déjà été donnée
+function checkExistingPermission() {
+    if (localStorage.getItem('tiltPermission') === 'granted') {
+        permissionButton.textContent = "Tilt Enabled";
+        permissionButton.style.backgroundColor = "#4CAF50";
+        orientationStatus.textContent = "Tilt control enabled!";
+        usingOrientation = true;
+        orientationPermissionGranted = true;
+        window.addEventListener('deviceorientation', handleOrientation);
+    }
+}
+
+// Gestion de l'orientation (identique à votre code original)
+function handleOrientation(e) {
+    if (!usingOrientation || !orientationPermissionGranted) return;
+    
+    // Votre logique existante de gestion de l'orientation
+    // ...
+}
+
+// Initialisation
+function init() {
+    checkOrientationSupport();
+    checkExistingPermission();
+    // ... reste de votre initialisation
+}
+
+// Au chargement de la page
+window.addEventListener('DOMContentLoaded', () => {
+    // Animation d'entrée pour le bouton
+    setTimeout(() => {
+        permissionButton.style.animation = "buttonEnter 0.6s ease-out forwards";
+    }, 400);
+    
+    init();
+});</script>
+</body>
+
+</html>
