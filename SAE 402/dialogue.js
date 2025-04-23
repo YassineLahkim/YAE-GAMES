@@ -7,7 +7,7 @@ const dialogues = [
     "Hi, I'm Lucas.",
     "I'm 15, and I love going on adventures to solve mysteries.",
     "They say this garden hides a lot of secrets... and I've heard a strange story. ",
-    "A painting has disappeared from the Mulhouse Heritage Museum",
+    "A painting has disappeared from the Mulhouse Fine Arts Museum",
     "Nobody knows what happened to it, but the last time it was seen was here, in the Jardin des Senteurs",
     "Are you up for helping me rummage around?",
     "I've got a hunch we're going to find something interesting..."

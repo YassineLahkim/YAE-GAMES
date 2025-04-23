@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Adventure</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Jersey 10', sans-serif;
+            background-image: url('img/museetableau.png');
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .app-container {
+            position: relative;
+            min-height: 100vh;
+            width: 100%;
+        }
+
+        /* Character and speech bubble */
+        .character-container {
+            position: absolute;
+            left: 50%;
+            bottom: 5%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: none;
+            width: 100%;
+        }
+
+        .character-img {
+            width: 100%;
+            max-width: 100%;
+            height: auto;
+            user-select: none;
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        .speech-bubble {
+            position: relative;
+            bottom: 0;
+            margin-bottom: -3.8vh;
+            background: #fff;
+            color: #222;
+            border-radius: 3.2vh;
+            padding: 1.8vh 1vh;
+            font-size: 2em;
+            font-family: 'Jersey 10', sans-serif;
+            box-shadow: 0 0.4vh 1.6vh rgba(0,0,0,0.15);
+            text-align: center;
+            cursor: pointer;
+            z-index: 20;
+            pointer-events: auto;
+            max-width: 90vw;
+        }
+
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 1.4vh 1.6vh 0 1.6vh;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+            filter: drop-shadow(0 0.3vh 0.3vh rgba(0,0,0,0.1));
+        }
+
+        /* Painting */
+        .tableau {
+            position: absolute;
+            top: calc(70% - 15px);
+            left: 50%;
+            width: 18vw;
+            min-width: 150px;
+            max-width: 220px;
+            height: auto;
+            aspect-ratio: 1/1;
+            transform: translateX(-50%);
+            cursor: grab;
+            z-index: 30;
+            display: none;
+            transition: all 0.3s ease;
+        }
+
+        .tableau.placed {
+            top: calc(25% - 15px);
+            left: 50%;
+            transform: translateX(-50%);
+            cursor: default;
+        }
+
+        /* Drop zone */
+        .drop-zone {
+            position: absolute;
+            top: calc(25% - 15px);
+            left: 50%;
+            transform: translateX(-50%);
+            width: 22vw;
+            min-width: 180px;
+            max-width: 250px;
+            height: 22vw;
+            min-height: 180px;
+            max-height: 250px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 1vh;
+            display: none;
+            z-index: 25;
+        }
+
+        .drop-zone.visible {
+            display: block;
+        }
+
+        /* End popup */
+        .end-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            display: none;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            color: white;
+            font-family: 'Jersey 10', sans-serif;
+        }
+
+        .end-popup.visible {
+            display: flex;
+        }
+
+        .end-message {
+            font-size: 3rem;
+            margin-bottom: 3rem;
+            text-align: center;
+            animation: fadeIn 1s ease-out;
+        }
+
+        .credits-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .credits-title {
+            font-size: 2rem;
+            margin-bottom: 1rem;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 0.5s forwards;
+        }
+
+        .names-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .creator-name {
+            font-size: 2rem;
+            opacity: 0;
+            transform: translateY(30px);
+        }
+
+        .name-1 {
+            animation: fadeInUp 0.8s ease-out 1s forwards;
+        }
+
+        .name-2 {
+            animation: fadeInUp 0.8s ease-out 1.3s forwards;
+        }
+
+        .name-3 {
+            animation: fadeInUp 0.8s ease-out 1.6s forwards;
+        }
+
+        .thank-you {
+            font-size: 2rem;
+            margin-top: 1rem;
+            opacity: 0;
+            animation: fadeIn 1s ease-out 2.2s forwards;
+        }
+
+        .menu-button {
+            margin-top: 2rem;
+            padding: 1rem 2rem;
+            font-size: 1.5rem;
+            background-color: #4ade80;
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-family: 'Jersey 10', sans-serif;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.8s ease-out 2.5s forwards;
+            transition: all 0.3s ease;
+        }
+
+        .menu-button:hover {
+            background-color: #3bc76f;
+            transform: translateY(0) scale(1.05);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive adaptation */
+        @media (max-width: 768px) {
+            .character-img {
+                width: 80vw;
+            }
+            
+            .tableau {
+                width: 25vw;
+            }
+            
+            .drop-zone {
+                width: 30vw;
+                height: 30vw;
+            }
+            
+            .end-message {
+                font-size: 2rem;
+            }
+            
+            .credits-title, .creator-name, .thank-you {
+                font-size: 1.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .tableau {
+                width: 35vw;
+            }
+            
+            .drop-zone {
+                width: 40vw;
+                height: 40vw;
+            }
+            
+            .end-message {
+                font-size: 1.5rem;
+            }
+            
+            .credits-title, .creator-name, .thank-you {
+                font-size: 1.2rem;
+            }
+            
+            .menu-button {
+                font-size: 1.2rem;
+                padding: 0.8rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Character and speech bubble -->
+        <div class="character-container" id="characterContainer">
+            <div class="speech-bubble" id="speechBubble"></div>
+            <img src="img/personnage par defaut.png" alt="Character" class="character-img" id="characterImg">
+        </div>
+
+        <!-- Drop zone -->
+        <div class="drop-zone" id="dropZone"></div>
+
+        <!-- Painting (initially hidden) -->
+        <img src="img/tableau.png" alt="Painting" id="tableau" class="tableau">
+
+        <!-- End popup -->
+        <div class="end-popup" id="endPopup">
+            <div class="end-message">Congratulations! You solved the mystery!</div>
+            <div class="credits-container">
+                <div class="credits-title">Game created by:</div>
+                <div class="names-container">
+                    <div class="creator-name name-1">Alexis Tauleigne</div>
+                    <div class="creator-name name-2">Yassine Lahkim</div>
+                    <div class="creator-name name-3">Erkam Izik</div>
+                </div>
+                <div class="thank-you">Thank you for playing!</div>
+            </div>
+            <button class="menu-button" id="menuButton">Return to Main Menu</button>
+        </div>
+    </div>
+
+    <script>
+        // === Image preloading ===
+        const preloadedImg = new Image();
+        preloadedImg.src = "img/personnage par defaut.png";
+
+        // === Dialog management ===
+        const dialogues = [
+            "Phew, we're finally in the painting room.",
+            "Help me put the artwork in its place."
+        ];
+
+        let dialogueIndex = 0;
+        const bubble = document.getElementById('speechBubble');
+        const characterImg = document.getElementById('characterImg');
+        const tableau = document.getElementById('tableau');
+        const dropZone = document.getElementById('dropZone');
+        const endPopup = document.getElementById('endPopup');
+        const menuButton = document.getElementById('menuButton');
+        let gameCompleted = false;
+
+        let typingSpeed = 40;
+        let typingTimeouts = [];
+        let isTyping = false;
+
+        // Adjust sizes based on screen
+        function adjustTableauSize() {
+            const screenWidth = window.innerWidth;
+            const baseWidth = 390;
+            const scaleFactor = Math.min(screenWidth / baseWidth, 1.5);
+            
+            const tableauSize = Math.min(Math.max(150, 180 * scaleFactor), 220);
+            tableau.style.width = `${tableauSize}px`;
+            
+            const dropZoneSize = Math.min(Math.max(180, 200 * scaleFactor), 250);
+            dropZone.style.width = `${dropZoneSize}px`;
+            dropZone.style.height = `${dropZoneSize}px`;
+        }
+
+        // Initial call and on resize
+        adjustTableauSize();
+        window.addEventListener('resize', adjustTableauSize);
+
+        function clearTyping() {
+            typingTimeouts.forEach(timeout => clearTimeout(timeout));
+            typingTimeouts = [];
+            isTyping = false;
+        }
+
+        function typeWriter(text, callback) {
+            bubble.textContent = "";
+            isTyping = true;
+            for (let i = 0; i < text.length; i++) {
+                typingTimeouts.push(setTimeout(() => {
+                    bubble.textContent += text.charAt(i);
+                    if (i === text.length - 1) {
+                        isTyping = false;
+                        if (callback) callback();
+                    }
+                }, typingSpeed * i));
+            }
+        }
+
+        function showDialogue(index) {
+            clearTyping();
+            if (index < dialogues.length) {
+                bubble.style.opacity = 1;
+                typeWriter(dialogues[index]);
+            } else {
+                bubble.style.opacity = 0;
+                tableau.style.display = 'block';
+                dropZone.classList.add('visible');
+                makeTableauDraggable();
+            }
+        }
+
+        function nextDialogue() {
+            if (gameCompleted) {
+                showCredits();
+                return;
+            }
+
+            if (isTyping) {
+                clearTyping();
+                bubble.textContent = dialogues[dialogueIndex];
+                isTyping = false;
+            } else {
+                dialogueIndex++;
+                showDialogue(dialogueIndex);
+            }
+        }
+
+        function showCredits() {
+            endPopup.classList.add('visible');
+        }
+
+        function returnToMainMenu() {
+            // Here you would typically redirect to your main menu
+            // For now, we'll just reload the page
+            window.location.reload();
+        }
+
+        // Event listeners
+        document.addEventListener('click', function (e) {
+            if (!e.target.closest('.sidebar') && !e.target.closest('.hamburger-menu') && !e.target.closest('.menu-button')) {
+                nextDialogue();
+            }
+        });
+
+        menuButton.addEventListener('click', returnToMainMenu);
+
+        showDialogue(0);
+
+        function makeTableauDraggable() {
+            let isDragging = false;
+            let startX, startY, startLeft, startTop;
+
+            tableau.addEventListener('mousedown', startDrag);
+            tableau.addEventListener('touchstart', startDrag);
+
+            function startDrag(e) {
+                if (tableau.classList.contains('placed')) return;
+                
+                isDragging = true;
+                tableau.style.cursor = 'grabbing';
+                
+                const rect = tableau.getBoundingClientRect();
+                startLeft = rect.left;
+                startTop = rect.top;
+                
+                if (e.type === 'mousedown') {
+                    startX = e.clientX;
+                    startY = e.clientY;
+                } else if (e.type === 'touchstart') {
+                    startX = e.touches[0].clientX;
+                    startY = e.touches[0].clientY;
+                }
+                
+                document.addEventListener('mousemove', drag);
+                document.addEventListener('touchmove', drag);
+                document.addEventListener('mouseup', endDrag);
+                document.addEventListener('touchend', endDrag);
+                
+                e.preventDefault();
+            }
+
+            function drag(e) {
+                if (!isDragging) return;
+                
+                let clientX, clientY;
+                if (e.type === 'mousemove') {
+                    clientX = e.clientX;
+                    clientY = e.clientY;
+                } else if (e.type === 'touchmove') {
+                    clientX = e.touches[0].clientX;
+                    clientY = e.touches[0].clientY;
+                }
+                
+                const dx = clientX - startX;
+                const dy = clientY - startY;
+                
+                const newTop = Math.min(startTop + dy, window.innerHeight - tableau.offsetHeight);
+                
+                tableau.style.left = `${startLeft + dx}px`;
+                tableau.style.top = `${newTop}px`;
+                tableau.style.transform = 'none';
+                
+                const tableauRect = tableau.getBoundingClientRect();
+                const dropZoneRect = dropZone.getBoundingClientRect();
+                
+                const isInDropZone = 
+                    tableauRect.left >= dropZoneRect.left &&
+                    tableauRect.right <= dropZoneRect.right &&
+                    tableauRect.top >= dropZoneRect.top &&
+                    tableauRect.bottom <= dropZoneRect.bottom;
+                
+                if (isInDropZone) {
+                    dropZone.style.borderColor = 'rgba(74, 222, 128, 0.5)';
+                } else {
+                    dropZone.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                }
+            }
+
+            function endDrag(e) {
+                if (!isDragging) return;
+                isDragging = false;
+                tableau.style.cursor = 'grab';
+                
+                document.removeEventListener('mousemove', drag);
+                document.removeEventListener('touchmove', drag);
+                document.removeEventListener('mouseup', endDrag);
+                document.removeEventListener('touchend', endDrag);
+                
+                const tableauRect = tableau.getBoundingClientRect();
+                const dropZoneRect = dropZone.getBoundingClientRect();
+                
+                const isInDropZone = 
+                    tableauRect.left >= dropZoneRect.left &&
+                    tableauRect.right <= dropZoneRect.right &&
+                    tableauRect.top >= dropZoneRect.top &&
+                    tableauRect.bottom <= dropZoneRect.bottom;
+                
+                if (isInDropZone) {
+                    tableau.classList.add('placed');
+                    tableau.style.left = '50%';
+                    tableau.style.top = 'calc(25% - 20px)'; 
+                    tableau.style.transform = 'translateX(-50%)';
+                    dropZone.style.display = 'none';
+                    
+                    tableau.style.cursor = 'default';
+                    tableau.removeEventListener('mousedown', startDrag);
+                    tableau.removeEventListener('touchstart', startDrag);
+
+                    // Show thank you message
+                    bubble.textContent = "Thank you for helping me solve this mystery!";
+                    bubble.style.opacity = 1;
+                    
+                    // Mark game as completed
+                    gameCompleted = true;
+                } else {
+                    tableau.style.left = '50%';
+                    tableau.style.top = 'calc(70% - 20px)'; 
+                    tableau.style.transform = 'translateX(-50%)';
+                    dropZone.style.borderColor = 'rgba(255, 255, 255, 0.3)';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
