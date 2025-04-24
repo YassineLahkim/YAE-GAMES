@@ -1,0 +1,74 @@
+  /* Basic reset */
+        *, *::before, *::after { margin:0; padding:0; box-sizing:border-box; }
+        html, body { width:100%; height:100%; overflow:hidden; }
+        body {
+            display:flex; justify-content:center; align-items:center;
+            background:#121212; color:#fff;
+            font-family:'Jersey 10', cursive; font-size:2em; text-align:center;
+        }
+        #startScreen, .popup, #gameContainer {
+            position:absolute; top:0; left:0; width:100%; height:100%;
+        }
+        #startScreen {
+            display:flex; flex-direction:column; justify-content:center; align-items:center;
+            background:rgba(0,0,0,0.8); backdrop-filter:blur(5px); z-index:10;
+        }
+        #startScreen h1 { font-size:3em; letter-spacing:2px; text-shadow:2px 2px 4px rgba(0,0,0,0.5); }
+        #instructions {
+            margin:20px; font-size:0.8em; color:#eee; text-shadow:1px 1px 2px rgba(0,0,0,0.5); max-width:80%;
+        }
+        #startBtn {
+            padding:20px 40px; font-size:1.5em;
+            background:#f44336; color:#fff; border:none; border-radius:10px;
+            cursor:pointer; transition:background 0.3s;
+            box-shadow:0 4px 8px rgba(0,0,0,0.3);
+        }
+        #startBtn:hover { background:#d32f2f; }
+        #startBtn:active { background:#b71c1c; }
+
+        #gameContainer { display:none; flex-direction:column; align-items:center; }
+        #gameInfo {
+            position:absolute; top:10px; left:10px;
+            background:rgba(0,0,0,0.7); padding:10px; border-radius:5px;
+            font-size:0.6em; text-align:left; z-index:20;
+        }
+        .button-container {
+            display:grid; grid-template:1fr 1fr / 1fr 1fr;
+            width:100vw; height:100vh; gap:5px; padding:5px;
+        }
+        .button {
+            display:flex; justify-content:center; align-items:center;
+            font-size:1.5em; font-weight:bold; color:#000000;
+            border:none; border-radius:10px; cursor:pointer;
+            user-select:none; touch-action:manipulation;
+            transition:transform 0.1s;
+            box-shadow:0 4px 8px rgba(0,0,0,0.3);
+            text-shadow:1px 1px 2px rgba(0,0,0,0.5);
+        }
+        .button:active { transform:scale(0.95); }
+        #yellowBtn { background:#ffeb3b; color:#222; }
+        #redBtn    { background:#f44336; }
+        #blueBtn   { background:#2196F3; }
+        #greenBtn  { background:#4CAF50; }
+        .highlight {
+            animation:highlight 0.5s;
+        }
+        @keyframes highlight {
+            0% { opacity:1; transform:scale(1); }
+            50% { opacity:0.7; transform:scale(0.95); }
+            100% { opacity:1; transform:scale(1); }
+        }
+        .popup {
+            display:none; justify-content:center; align-items:center;
+            background:rgba(0,0,0,0.8); z-index:30;
+        }
+        .popup-content {
+            background:#333; padding:30px; border-radius:10px; text-align:center;
+            max-width:80%; color:#fff;
+        }
+        .popup-content button {
+            margin-top:20px; padding:15px 30px; font-size:1em;
+            background:#424242; color:#fff; border:none; border-radius:5px;
+            cursor:pointer; transition:background 0.3s;
+        }
+        .popup-content button:hover { background:#616161; }

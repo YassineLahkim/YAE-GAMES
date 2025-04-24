@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mulhouse - Animation</title>
+
+  <!-- Polices Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css"/>
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Tes styles -->
+  <link rel="stylesheet" href="style/stylesAcceuil.css">
+  <link rel="stylesheet" href="style/menuetcarte.css">
+</head>
+<body>
+  <div class="app-container">
+    <div class="city-image"></div>
+    <main class="main-content">
+      <h1 class="welcome-text">Welcome to Mulhouse</h1>
+      <a href="jardin.html" class="start-button">Start</a>
+    </main>
+    <div class="cloud cloud-left"></div>
+    <div class="cloud cloud-right"></div>
+
+    <!-- hamburger & sidebar -->
+    <div class="hamburger-menu" id="hamburger">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+    <nav class="sidebar" id="sidebar">
+      <ul class="menu-items">
+        <li class="menu-item"><a href="accueil.html">GAME 1</a></li>
+        <li class="menu-item"><a href="erkanindex.html">GAME 2</a></li>
+        <li class="menu-item"><a href="game3.html">GAME 3</a></li>
+      </ul>
+    </nav>
+
+    <!-- mini-map -->
+    <button type="button" class="map-button"><span class="map-icon"></span></button>
+    <div id="minimap-modal" class="minimap-modal hidden">
+      <div class="minimap-backdrop"></div>
+      <div class="minimap-content">
+        <button type="button" class="minimap-close">&times;</button>
+        <div id="minimap-map"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+
+  <!-- Ton code de toggle menu & sidebar -->
+  <script src="script/scriptindex.js"></script>
+  <!-- Ton code de la mini-map -->
+  <script src="script/minimap.js"></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(()=>console.log('SW enregistré'))
+        .catch(err=>console.error('SW erreur', err));
+    }
+  </script>
+</body>
+</html>

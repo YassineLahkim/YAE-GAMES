@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <title>Adventure in the Park</title>
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#4CAF50" />
+  <meta name="description"
+    content="Une aventure amusante en vélo dans le parc. Suivez le personnage et découvrez ce qu'il a à dire." />
+
+  <!-- Icônes -->
+  <link rel="icon" href="img/icons/favicon-192x192.png" />
+  <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet" />
+
+  <!-- Préchargement des images -->
+  <link rel="preload" href="img/princ_11zon.webp" as="image" type="image/webp" />
+  <link rel="preload" href="img/velo_11zon.webp" as="image" type="image/webp" />
+
+  <!-- Styles spécifiques -->
+  <link rel="stylesheet" href="style/velo.css" />
+  <link rel="stylesheet" href="style/menuetcarte.css" />
+
+  <!-- Leaflet (pour minimap) -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <link rel="stylesheet"
+        href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+</head>
+
+<body>
+
+    <a href="index.html" class="back-button">Back</a>
+
+  <div class="app-container">
+    <!-- Personnage et bulle de dialogue -->
+    <div class="character-container" id="characterContainer">
+      <div class="speech-bubble" id="speechBubble"></div>
+      <img src="img/princ_11zon.webp" alt="Personnage principal" class="character-img" id="characterImg" />
+    </div>
+    <!-- Vélo (reste inchangé) -->
+    <img src="img/velo_11zon.webp" alt="Vélo du personnage" class="bike" id="bike" />
+  </div>
+
+  <!-- Menu Hamburger -->
+  <div class="hamburger-menu" id="hamburger">
+    <div class="bar"></div>
+    <div class="bar"></div>
+    <div class="bar"></div>
+  </div>
+
+  <!-- Bouton Carte -->
+  <button type="button" class="map-button"></button>
+
+  <!-- Modal Minimap -->
+  <div id="minimap-modal" class="minimap-modal hidden">
+    <div class="minimap-backdrop"></div>
+    <div class="minimap-content">
+      <button type="button" class="minimap-close" aria-label="Fermer la carte">&times;</button>
+      <div id="minimap-map"></div>
+    </div>
+  </div>
+
+  <!-- Menu déroulant (Sidebar) -->
+  <nav class="sidebar" id="sidebar">
+    <ul class="menu-items">
+      <li class="menu-item"><a href="accueil.html">GAME 1</a></li>
+      <li class="menu-item"><a href="erkanindex.html">GAME 2</a></li>
+      <li class="menu-item"><a href="game3.html">GAME 3</a></li>
+    </ul>
+  </nav>
+
+  <!-- Scripts JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js" defer></script>
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js" defer></script>
+  <script src="script/scriptindex.js" defer></script>
+  <script src="script/velo.js" defer></script>
+  <script src="script/minimap.js" defer></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then(reg => console.log('✅ Service Worker enregistré'))
+          .catch(err => console.error('❌ Erreur Service Worker', err));
+      });
+    }
+  </script>
+</body>
+
+</html>

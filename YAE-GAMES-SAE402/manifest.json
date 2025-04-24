@@ -1,0 +1,30 @@
+{
+  "name": "SAE 402 YAE Games",
+  "short_name": "YAEGAMES",
+  "start_url": "index.html",
+  "display": "standalone",
+  "background_color": "#9CE1FF",
+  "theme_color": "rgba(48, 195, 213, 1)",
+  "icons": [
+    {
+      "src": "img/icons/favicon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/favicon-180x180.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "img/icons/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

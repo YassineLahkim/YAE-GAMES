@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Museum Game</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+    <!-- Feuille de style -->
+    <link rel="stylesheet" href="style/stylesmusee.css">
+    <link rel="stylesheet" href="style/menuetcarte.css">
+
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Scène interactive du jeu avec personnage et dialogue.">
+
+    <!-- Icônes -->
+    <link rel="icon" href="img/icons/favicon-192x192.png">
+    <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ Service Worker enregistré'))
+                .catch(err => console.error('❌ Erreur Service Worker', err));
+        }
+    </script>
+</head>
+
+<body>
+
+    <a href="index.html" class="back-button">Back</a>
+
+    <div class="app-container">
+        <!-- Image de fond -->
+        <div class="background-image"></div>
+
+        <!-- Personnage et bulle de dialogue -->
+        <div class="character-container" id="characterContainer">
+            <div class="speech-bubble" id="speechBubble"></div>
+            <img src="img/princ_11zon.webp" alt="Personnage" class="character-img" id="characterImg">
+        </div>
+        <!-- Menu Hamburger -->
+        <div class="hamburger-menu" id="hamburger">
+            <div class="bar"></div>
+            <div class="bar"></div>
+            <div class="bar"></div>
+        </div>
+
+        <!-- Bouton Carte -->
+        <button type="button" class="map-button"></button>
+
+        <!-- Modal Minimap -->
+        <div id="minimap-modal" class="minimap-modal hidden">
+            <div class="minimap-backdrop"></div>
+            <div class="minimap-content">
+                <button type="button" class="minimap-close" aria-label="Fermer la carte">&times;</button>
+                <div id="minimap-map"></div>
+            </div>
+        </div>
+
+        <!-- Menu déroulant (Sidebar) -->
+        <nav class="sidebar" id="sidebar">
+            <ul class="menu-items">
+                <li class="menu-item"><a href="accueil.html">GAME 1</a></li>
+                <li class="menu-item"><a href="erkanindex.html">GAME 2</a></li>
+                <li class="menu-item"><a href="game3.html">GAME 3</a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script src="script/dialogue2.js"></script>
+    <!-- Script menu -->
+    <script src="script/scriptindex.js"></script>
+    <!-- Comportement de la minimap -->
+    <script src="script/minimap.js"></script>
+</body>
+
+</html>
