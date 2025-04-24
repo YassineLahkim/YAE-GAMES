@@ -1,0 +1,155 @@
+/* =======================
+   MENU HAMBURGER
+   ======================= */
+   .hamburger-menu {
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    width: 30px;
+    height: 25px;
+    cursor: pointer;
+    z-index: 1001;
+    /* visible immédiatement */
+    opacity: 1;
+    animation: none;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.hamburger-menu .bar {
+    height: 3px;
+    width: 100%;
+    background: #fff;
+    position: absolute;
+    left: 0;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.hamburger-menu .bar:nth-child(1) { top: 0; }
+.hamburger-menu .bar:nth-child(2) { top: 50%; transform: translateY(-50%); }
+.hamburger-menu .bar:nth-child(3) { bottom: 0; }
+.hamburger-menu.active .bar:nth-child(1) {
+    top: 50%;
+    transform: translateY(-50%) rotate(45deg);
+}
+.hamburger-menu.active .bar:nth-child(2) { opacity: 0; }
+.hamburger-menu.active .bar:nth-child(3) {
+    top: 50%;
+    bottom: auto;
+    transform: translateY(-50%) rotate(-45deg);
+}
+
+/* =======================
+   MENU DÉROULANT (SIDEBAR)
+   ======================= */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: -250px;
+    width: 250px;
+    height: 100vh;
+    background: rgba(18, 25, 33, 0.9);
+    transition: left 0.3s ease;
+    z-index: 1000;
+    overflow-y: auto;
+}
+.sidebar.active { left: 0; }
+
+.menu-items {
+    list-style: none;
+    padding: 70px 20px 20px;
+}
+.menu-item {
+    padding: 15px 0;
+    color: #fff;
+    font-size: 18px;
+    cursor: pointer;
+    border-bottom: 1px solid rgba(0,0,0,0.1);
+    transition: background 0.3s;
+}
+.menu-item:hover {
+    background: rgba(44,62,80,0.7);
+}
+.menu-item a {
+    color: #fff;
+    text-decoration: none;
+    display: block;
+}
+
+/* =======================
+   BOUTON CARTE
+   ======================= */
+.map-button {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    background: rgba(48,195,213,0.8) url('/img/iconmap.png') center/cover no-repeat;
+    border-radius: 50%;
+    border: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+    z-index: 100;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    /* visible immédiatement */
+    opacity: 1;
+    animation: none;
+}
+.map-button:hover {
+    transform: scale(1.1);
+}
+
+/* =======================
+   MODAL MINIMAP
+   ======================= */
+.minimap-modal.hidden { display: none; }
+.minimap-modal {
+    position: fixed;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+.minimap-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
+}
+.minimap-content {
+    position: relative;
+    width: 90vw;
+    max-width: 600px;
+    height: 70vh;
+    max-height: 500px;
+    background: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    z-index: 10;
+}
+.minimap-close {
+    position: absolute;
+    top: 8px;
+    right: 12px;
+    background: none;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    z-index: 20;
+}
+#minimap-map {
+    width: 100%;
+    height: 100%;
+}
+
+/* =======================
+   ANIMATIONS GÉNÉRALES
+   ======================= */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}

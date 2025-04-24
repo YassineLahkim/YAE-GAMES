@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Victoire !</title>
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#FF5722" />
+  <meta name="description" content="Victory page of the Ball Trap Game. Congrats to the player !" />
+
+  <!-- Icônes -->
+  <link rel="icon" href="img/icons/favicon-192x192.png" />
+  <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+  <!-- Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet" media="all" />
+
+  <!-- Préchargement des ressources -->
+  <link rel="preload" href="img/tableau_11zon.webp" as="image" type="image/webp" />
+  <link rel="preload" href="sons/victory.mp3" as="audio" type="audio/mp3" />
+
+  <!-- CSS différé -->
+  <link rel="stylesheet" href="style/stylewin.css" media="print" onload="this.media='all'" />
+  <noscript><link rel="stylesheet" href="style/stylewin.css" /></noscript>
+</head>
+
+<body>
+  <div class="container fade-in">
+    <div class="win-text" id="winText">WIN!</div>
+
+    <div class="painting" id="painting">
+      <img src="img/tableau_11zon.webp" alt="Tableau mystérieux" />
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+      <div class="sparkle"></div>
+    </div>
+
+    <div class="characters" id="characters">
+      <div class="character" id="lucasCharacter">
+        <div class="speech-bubble left" id="lucasSpeech" aria-live="polite"></div>
+        <img src="img/princ_11zon.webp" alt="Lucas" />
+      </div>
+
+      <div class="character" id="mysteriousCharacter">
+        <div class="speech-bubble right" id="mysteriousSpeech" aria-live="polite"></div>
+        <img src="img/old_11zon.webp" alt="Personnage mystérieux" />
+      </div>
+    </div>
+
+    <button id="startButton" aria-label="Aller à l'énigme suivante">Go to the next puzzle</button>
+  </div>
+
+  <audio id="victorySound" src="sons/victory.mp3" preload="auto" aria-hidden="true"></audio>
+
+  <!-- Script du jeu -->
+  <script src="script/scriptwin.js" defer></script>
+
+  <!-- Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('Service Worker enregistré ✅'))
+        .catch(err => console.error('Erreur Service Worker ❌', err));
+    }
+  </script>
+</body>
+
+</html>

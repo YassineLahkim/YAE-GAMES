@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Garden Mystery</title>
+
+    <!-- Polices Google -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+    <!-- Preload images -->
+    <link rel="preload" href="img/fond_11zon.webp" as="image" type="image/webp">
+    <link rel="preload" href="img/princ_11zon.webp" as="image">
+    <link rel="preload" href="img/old_11zon.webp" as="image">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style/styleIndex.css" media="print" onload="this.media='all'">
+    <noscript>
+        <link rel="stylesheet" href="style/styleIndex.css">
+    </noscript>
+
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+
+    <!-- Icônes pour PWA -->
+    <link rel="apple-touch-icon" sizes="180x180" href="img/icons/favicon-192x192.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="img/icons/favicon-192x192.png">
+</head>
+
+<body>
+    <header>
+        <h1>The Garden Mystery</h1>
+    </header>
+
+    <a href="index.html" class="back-button">Back</a>
+
+
+    <main class="container fade-in">
+        <section class="characters">
+            <article class="character" id="lucasCharacter">
+                <div class="speech-bubble left" id="lucasSpeech"></div>
+                <picture>
+                    <source srcset="img/princ_11zon.webp" type="image/webp">
+                    <img src="img/princ_11zon.webp" alt="Lucas" loading="eager">
+                </picture>
+            </article>
+            <article class="character" id="mysteriousCharacter">
+                <div class="speech-bubble right" id="mysteriousSpeech"></div>
+                <picture>
+                    <source srcset="img/old_11zon.webp" type="image/webp">
+                    <img src="img/old_11zon.webp" alt="Personnage mystérieux" loading="eager">
+                </picture>
+            </article>
+        </section>
+        <button id="startButton" aria-label="Start the adventure">Start the adventure</button>
+    </main>
+
+    <script src="script/yassineindex.js"></script>
+
+    <!-- Enregistrement du Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js')
+                .then(() => console.log('Service Worker enregistré !'))
+                .catch(err => console.error('Erreur Service Worker :', err));
+        }
+    </script>
+</body>
+
+</html>

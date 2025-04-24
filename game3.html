@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aventure au Musée</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+    <!-- Feuille de style -->
+    <link rel="stylesheet" href="style/game3.css">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <meta name="description" content="Jeu d'aventure dans un musée avec sélection de mode.">
+
+    <!-- Icônes -->
+    <link rel="icon" href="img/icons/favicon-192x192.png">
+    <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ Service Worker enregistré'))
+                .catch(err => console.error('❌ Erreur Service Worker', err));
+        }
+    </script>
+</head>
+
+<body>
+    <div class="app-container">
+        <!-- Image de fond -->
+        <div class="background-image"></div>
+
+        <!-- Personnage et bulle de dialogue -->
+        <div class="character-container" id="characterContainer">
+            <div class="speech-bubble" id="speechBubble"></div>
+            <img src="img/personnage-peur_11zon.webp" alt="Personnage" class="character-img" id="characterImg">
+        </div>
+
+        <!-- Ecran de choix des modes -->
+        <div class="mode-selection" id="modeSelection">
+            <h1>Choose Your Mode</h1>
+            <button class="mode-btn" id="standardModeBtn">Standard Mode</button>
+            <p class="mode-description">Normal difficulty</p>
+            <button class="mode-btn" id="accessibleModeBtn">Blind Mode</button>
+            <p class="mode-description">Adapted interface</p>
+        </div>
+    </div>
+
+    <script src="script/game3.js"></script>
+</body>
+
+</html>

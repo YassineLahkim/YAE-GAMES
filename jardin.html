@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Jeu Mobile – Personnage</title>
+
+  <!-- Polices Google -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+  <!-- Leaflet CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  <!-- Leaflet Routing Machine CSS -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.css" />
+
+  <!-- Styles spécifiques à cette page -->
+  <link rel="stylesheet" href="style/stylesjardin.css">
+  <!-- Styles du menu, du sidebar et de la mini-carte -->
+  <link rel="stylesheet" href="style/menuetcarte.css">
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#000000">
+
+  <!-- Icônes PWA -->
+  <link rel="apple-touch-icon" sizes="180x180" href="img/icons/favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icons/favicon-192x192.png">
+
+  <!-- Leaflet JS -->
+  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+  <!-- Leaflet Routing Machine JS -->
+  <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Image de fond -->
+    <div class="background-image"></div>
+
+    <a href="index.html" class="back-button">Back</a>
+
+
+    <!-- Personnage et bulle de dialogue -->
+    <div class="character-container" id="characterContainer">
+      <div class="speech-bubble" id="speechBubble">Salut, moi c’est Lucas.</div>
+      <img src="img/princ_11zon.webp" alt="Personnage" class="character-img" id="characterImg">
+    </div>
+
+    <!-- Lumière découverte (cachée au début) -->
+    <div class="light-discovery" id="lightDiscovery"></div>
+
+    <!-- Menu Hamburger -->
+    <div class="hamburger-menu" id="hamburger">
+      <div class="bar"></div>
+      <div class="bar"></div>
+      <div class="bar"></div>
+    </div>
+
+    <!-- Bouton Carte -->
+    <button type="button" class="map-button"></button>
+
+    <!-- Modal Minimap -->
+    <div id="minimap-modal" class="minimap-modal hidden">
+      <div class="minimap-backdrop"></div>
+      <div class="minimap-content">
+        <button type="button" class="minimap-close" aria-label="Fermer la carte">&times;</button>
+        <div id="minimap-map"></div>
+      </div>
+    </div>
+
+    <!-- Menu déroulant (Sidebar) -->
+    <nav class="sidebar" id="sidebar">
+      <ul class="menu-items">
+        <li class="menu-item"><a href="accueil.html">GAME 1</a></li>
+        <li class="menu-item"><a href="erkanindex.html">GAME 2</a></li>
+        <li class="menu-item"><a href="game3.html">GAME 3</a></li>
+      </ul>
+    </nav>
+  </div>
+
+  <!-- Script du dialogue -->
+  <script src="script/dialogue.js"></script>
+  <!-- Script menu -->
+  <script src="script/scriptindex.js"></script>
+  <!-- Comportement de la minimap -->
+  <script src="script/minimap.js"></script>
+  <!-- Enregistrement du Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker enregistré !'))
+        .catch(err => console.error('Erreur Service Worker :', err));
+    }
+  </script>
+</body>
+
+</html>

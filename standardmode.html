@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Reactor - Special Edition</title>
+    <link rel="stylesheet" href="style/standardmode.css">
+    
+</head>
+<body>
+    <div class="background-image"></div>
+
+    <div class="header">
+        <div class="level-display">Level: <span id="level">1</span>/5</div>
+        <div class="score-display">Score: <span id="score">0</span></div>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" id="startBtn">Start</button>
+        <button class="control-btn" id="pauseBtn" disabled>Pause</button>
+    </div>
+
+    <div class="game-container">
+        <div id="code-bar"></div> <!-- Green bar to display the code -->
+
+        <div class="grid-container" id="grid">
+            <div class="grid-cell" id="btn1">1</div>
+            <div class="grid-cell" id="btn2">2</div>
+            <div class="grid-cell" id="btn3">3</div>
+            <div class="grid-cell" id="btn4">4</div>
+            <div class="grid-cell" id="btn5">5</div>
+            <div class="grid-cell" id="btn6">6</div>
+            <div class="grid-cell" id="btn7">7</div>
+            <div class="grid-cell" id="btn8">8</div>
+            <div class="grid-cell" id="btn9">9</div>
+        </div>
+
+        <div class="special-buttons">
+            <button class="special-btn" id="btnM">M</button>
+            <button class="special-btn" id="btnHash">#</button>
+            <button class="special-btn" id="btnI">i</button>
+        </div>
+    </div>
+
+    <!-- Game Over (Lost) Popup -->
+    <div class="game-over game-over-lost" id="gameOverLost">
+        <div class="game-over-content">
+            <h2>Lost, you triggered the alarm!</h2>
+            <p>Score: <span id="finalScoreLost">0</span></p>
+            <button class="control-btn" id="playAgainBtn" style="margin-top: 20px;">Restart the game</button> <!-- Restart button -->
+        </div>
+    </div>
+
+    <!-- Game Over (Win) Popup -->
+    <div class="game-over game-over-win" id="gameOverWin">
+        <div class="game-over-content">
+            <h2>Congratulations, you have disabled the alarm!</h2>
+            <p>Score: <span id="finalScoreWin">0</span></p>
+            <button class="control-btn" id="goToPaintingRoomBtn" style="margin-top: 20px;">Go to the painting room</button> <!-- Go to painting room button -->
+        </div>
+    </div>
+
+  <script src="script/standardmode.js"></script>
+    
+</body>
+</html>

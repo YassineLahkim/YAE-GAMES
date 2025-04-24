@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Jeu Ball Master - Atteignez le trou noir 3 fois pour gagner !">
+  <meta name="theme-color" content="#FF5722">
+  <title>Ball Master</title>
+
+  <!-- Preload de l'image -->
+  <link rel="preload" href="/img/fond_11zon.webp" as="image" type="image/webp">
+
+  <!-- Feuille de style -->
+  <link rel="stylesheet" href="style/styleaccueil.css">
+
+  <!-- PWA manifest -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="192x192" href="img/icons/favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icons/favicon-192x192.png">
+</head>
+
+<body>
+  <main id="startScreen" role="main" aria-label="Écran de démarrage du jeu Ball Master">
+    <h1 id="gameTitle">Ball Master</h1>
+    <p id="gameSubtitle">Reach the hole 3 times to win !</p>
+
+    <div class="control-info">
+      <p>📱 Tilt your phone<br><br>or touch the screen to play</p>
+    </div>
+
+    <div class="btn-container">
+      <button class="game-btn normal-btn" onclick="location.assign('jeu.html')" aria-label="Lancer le mode standard">
+        Standard Mode
+      </button>
+
+      <button class="game-btn accessibility-btn" onclick="location.assign('jeu1.html')" aria-label="Lancer le mode accessible">
+        Accessible Mode 
+      </button>
+    </div>
+  </main>
+
+  <!-- Enregistrement du Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker enregistré avec succès'))
+        .catch(err => console.error('Erreur d’enregistrement du Service Worker :', err));
+    }
+  </script>
+</body>
+
+</html>

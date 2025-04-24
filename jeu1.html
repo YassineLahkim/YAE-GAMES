@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+  <meta name="description"
+    content="Jeu HTML interactif où vous devez attraper une balle sans tomber dans les pièges." />
+  <meta name="theme-color" content="#FF5722" />
+  <title>Ball Trap Game</title>
+
+  <!-- Icônes + Manifest -->
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="img/icons/favicon-192x192.png" type="image/png" />
+  <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png" />
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style/stylejeu1.css" />
+
+  <!-- Scripts externes -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
+  <audio id="victorySound" src="sons/victory.mp3" preload="auto" aria-hidden="true"></audio>
+
+  <style>
+    #orientationStatus {
+      font-size: 1rem;
+      color: #fff;
+      padding: 8px;
+      text-align: center;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+  <main role="main">
+    <canvas id="gameCanvas" role="img" aria-label="Zone de jeu interactive avec pièges et balle à attraper"></canvas>
+
+    <div id="targetHole" class="hole" role="presentation"></div>
+    <div id="countdown" aria-live="assertive"></div>
+
+    <button id="pauseButton" aria-label="Mettre le jeu en pause">PAUSE</button>
+
+    <section id="ui" style="opacity: 0;" aria-label="Interface du joueur">
+      <div>⭐ Score: <span id="score" aria-live="polite">0</span></div>
+      <div>❤️ Vies: <span id="lives" aria-live="polite"></span></div>
+      <div class="progress-container" role="progressbar" aria-valuemin="0" aria-valuemax="100">
+        <div class="progress-bar" id="progressBar" style="width: 0%;"></div>
+      </div>
+      <div id="hintButton" style="display: block; text-align:center;">Hint</div>
+      <div id="hintText" style="display: none;">2-Pause-2</div>
+    </section>
+
+    <section id="message" aria-live="polite">
+      <h2 id="resultMessage" role="alert"></h2>
+      <button id="restartButton" aria-label="Rejouer">Restart</button>
+    </section>
+
+    <button id="startButton" class="pulse" aria-label="Démarrer le jeu">Start</button>
+<!-- <button id="permissionButton" aria-label="Activer le contrôle par inclinaison">Enable Tilt</button> -->
+    <div id="orientationStatus" aria-live="polite"></div>
+
+    <div id="cheatNotification" role="alert">Cheat code activated!</div>
+  </main>
+
+  <script src="script/scriptjeu1.js" defer></script>
+
+  <!-- Enregistrement du Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker enregistré pour jeu1.html'))
+        .catch(err => console.error('Erreur SW :', err));
+    }
+  </script>
+</body>
+
+</html>

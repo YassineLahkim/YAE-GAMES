@@ -1,0 +1,190 @@
+/* Reset de base */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    overflow: hidden;
+    height: 100vh;
+    font-family: 'Jersey 10', Arial, sans-serif;
+}
+
+/* Container principal */
+.app-container {
+    position: relative;
+    min-height: 100vh;
+    background: linear-gradient(to bottom, #80d7fc 0%, #87C4B3 100%);
+    overflow: hidden;
+}
+
+/* --- Animation de la ville --- */
+.city-image {
+    position: absolute;
+    width: 100%;
+    height: 80vh;
+    background: url('/img/mulhouseciel_1_11zon.webp') bottom center/cover no-repeat;
+    bottom: -80vh;
+    left: 0;
+    animation: riseUp 2.5s ease-out forwards 0.5s;
+    z-index: 2;
+}
+
+@keyframes riseUp {
+    0% { bottom: -80vh; opacity: 0; }
+    100% { bottom: 0; opacity: 1; }
+}
+
+/* --- Contenu principal --- */
+.main-content {
+    position: relative;
+    z-index: 10;
+    color: #fff;
+    text-align: center;
+    padding-top: 25vh;
+    opacity: 0;
+    animation: fadeIn 1s ease-in forwards 3s;
+    pointer-events: none;
+}
+
+.welcome-text {
+    width: 4.5em;
+    margin: 0 auto;
+    font-size: 3em;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+    line-height: 0.9em;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* --- Bouton principal --- */
+.start-button {
+    background: rgba(48, 195, 213, 1);
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 1.5em;
+    margin: 30px auto 0;
+    display: block;
+    pointer-events: auto;
+    transition: all 0.3s ease;
+    font-family: 'Jersey 10', monospace;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    text-decoration: none;
+    min-width: 180px;
+    width: fit-content;
+    animation: float 3s ease-in-out infinite;
+}
+
+.start-button:hover {
+    background: rgba(48, 195, 213, 0.8);
+    transform: scale(1.05);
+    border-color: rgba(255,255,255,0.8);
+}
+
+/* --- Nuages animés --- */
+.cloud {
+    position: absolute;
+    width: 600px;
+    height: 300px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    opacity: 0;
+    z-index: 1;
+    top: 10%;
+    animation-timing-function: ease-out;
+}
+
+.cloud-left {
+    background-image: url('/img/nuage-1_11zon.webp');
+    left: -30%;
+    animation: enterLeft 4s forwards 1.5s;
+}
+
+.cloud-right {
+    background-image: url('/img/nuage 2_11zon.webp');
+    left: -30%;
+    animation: enterRight 5s forwards 2s;
+}
+
+@keyframes enterLeft {
+    0% { left: -30%; opacity: 0; }
+    70% { opacity: 0.9; }
+    100% { left: 10%; opacity: 0.7; }
+}
+@keyframes enterRight {
+    0% { left: -30%; opacity: 0; }
+    70% { opacity: 0.9; }
+    100% { left: 80%; opacity: 0.7; }
+}
+
+/* --- Marqueurs “Game” numérotés --- */
+.game-div-icon {
+    background-color: #007bff;
+    color: #fff;
+    border: 2px solid #fff;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    text-align: center;
+    line-height: 32px;
+    font-weight: bold;
+}
+
+/* --- Marqueur “Utilisateur” (bonhomme) --- */
+.user-icon {
+    background-image: url('/img/user-icon.svg');
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 32px;
+    height: 32px;
+}
+
+/* --- Masquer le panneau d’itinéraire blanc --- */
+.leaflet-routing-container {
+    display: none !important;
+}
+
+/* --- Ligne d’itinéraire rouge --- */
+.leaflet-routing-line {
+    stroke: red !important;
+    color: red !important;
+}
+
+/* --- Cercle rouge pour ta localisation --- */
+.user-circle {
+    stroke: #ff0000;
+    color: #ff0000;
+    fill: #ff0000;
+    fill-opacity: 1;
+}
+
+/* --- Tooltip “Votre localisation” --- */
+.user-tooltip {
+    background: white;
+    color: black;
+    padding: 2px 5px;
+    border-radius: 4px;
+    font-size: 0.8em;
+}
+
+/* --- Animations générales --- */
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+/* === OVERRIDE pour que hamburger et map-button soient VISIBLE immédiatement === */
+.hamburger-menu,
+.map-button {
+    opacity: 1 !important;
+    animation: none !important;
+}

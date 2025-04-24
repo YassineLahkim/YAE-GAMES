@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Museum Adventure</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style/paintingroom.css">
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#FF5722" />
+  <meta name="description" content="Solve the painting mystery in the museum!">
+
+  <!-- PWA Icons -->
+  <link rel="icon" href="img/icons/favicon-192x192.png">
+  <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+  <div class="app-container">
+    <!-- Character and speech bubble -->
+    <div class="character-container" id="characterContainer">
+      <div class="speech-bubble" id="speechBubble"></div>
+      <img src="img/princ_11zon.webp" alt="Character" class="character-img" id="characterImg">
+    </div>
+
+    <!-- Drop zone -->
+    <div class="drop-zone" id="dropZone"></div>
+
+    <!-- Painting (initially hidden) -->
+    <img src="img/tableau_11zon.webp" alt="Painting" id="tableau" class="tableau">
+
+    <!-- End popup -->
+    <div class="end-popup" id="endPopup">
+      <div class="end-message">Congratulations! You solved the mystery!</div>
+      <div class="credits-container">
+        <div class="credits-title">Game created by:</div>
+        <div class="names-container">
+          <div class="creator-name name-1">Alexis Tauleigne</div>
+          <div class="creator-name name-2">Yassine Lahkim</div>
+          <div class="creator-name name-3">Erkan Isik</div>
+        </div>
+        <div class="thank-you">Thank you for playing!</div>
+      </div>
+      <button class="menu-button" id="menuButton">Return to Main Menu</button>
+    </div>
+  </div>
+
+  <script src="script/paintingroom.js"></script>
+
+  <script>
+    // Enregistrer le service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js')
+          .then(reg => console.log("✅ Service Worker enregistré", reg))
+          .catch(err => console.error("❌ Erreur Service Worker", err));
+      });
+    }
+  </script>
+</body>
+
+</html>
