@@ -1,0 +1,332 @@
+/* Style général */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+}
+
+body {
+    background: linear-gradient(135deg, #6B73FF 0%, #000DFF 100%);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    overflow: hidden;
+    background: url('/img/image-jeu.webp');
+}
+
+/* Conteneur principal */
+#container {
+    width: 100vw;
+    height: 100vh;
+    position: relative;
+}
+
+/* Menu à gauche */
+#levelSelection {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+#levelSelection h2 {
+    font-size: 2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #FFFFFF;
+}
+
+#levelSelection button {
+    width: 80%;
+    padding: 15px;
+    margin: 10px 0;
+    border: none;
+    background: #FFFFFF;
+    color: #6B73FF;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
+}
+
+#levelSelection button:hover {
+    transform: scale(1.05);
+}
+
+/* Zone de jeu */
+#gameArea {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+#gameCanvas, #previewCanvas {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+#previewCanvas {
+    background: rgba(255, 255, 255, 0.1);
+    z-index: 1;
+}
+
+#gameCanvas {
+    display: none;
+    z-index: 2;
+}
+
+/* Bouton pause */
+#pauseButton {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    cursor: pointer;
+}
+
+/* Bouton inclinaison */
+#tiltButton {
+    position: absolute;
+    top: 80px;
+    right: 20px;
+    background: rgba(255, 255, 255, 0.8);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-size: 1rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    cursor: pointer;
+}
+
+/* Menu pause */
+#pauseMenu {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(255, 255, 255, 0.9);
+    padding: 20px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    text-align: center;
+    z-index: 100;
+    flex-direction: column;
+}
+
+#pauseMenu h2 {
+    margin-bottom: 15px;
+    font-size: 1.8rem;
+    color: #6B73FF;
+}
+
+#pauseMenu button {
+    padding: 12px 25px;
+    margin: 10px;
+    border: none;
+    background: #6B73FF;
+    color: white;
+    border-radius: 25px;
+    font-size: 1rem;
+    transition: background 0.3s;
+    cursor: pointer;
+}
+
+#pauseMenu button:hover {
+    background: #5A61E5;
+}
+
+/* Écrans de fin */
+.end-screen {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    z-index: 30;
+}
+
+.end-screen h1 {
+    font-size: 2.5rem;
+    margin-bottom: 20px;
+}
+
+.end-screen button {
+    padding: 15px 30px;
+    background: white;
+    border: none;
+    border-radius: 25px;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* Compte à rebours */
+#countdown {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 5rem;
+    color: white;
+    z-index: 100;
+}
+
+/* UI du jeu */
+.game-ui {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    z-index: 10;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.timer {
+    font-size: 1.5rem;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+.hearts-container {
+    display: flex;
+    gap: 5px;
+}
+
+.heart {
+    font-size: 1.8rem;
+    color: #ff4d4d;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+
+
+
+#winContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    text-align: center;
+    background: url('../img/image-jeu.webp') no-repeat center center fixed;
+    background-size: cover;
+    color: white;
+    padding: 20px;
+    gap: 15px;
+    animation: fadeIn 1s ease-in-out;
+  }
+  
+  #winContainer h1 {
+    font-size: 3rem;
+    margin: 0;
+    text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+    animation: popUp 0.6s ease forwards;
+  }
+  
+  #winContainer p {
+    font-size: 1.4rem;
+    margin: 0;
+    text-shadow: 1px 1px 4px rgba(0,0,0,0.4);
+  }
+  
+  #nextGameLink {
+    margin-top: 20px;
+    padding: 15px 30px;
+    background: white;
+    color: #6B73FF;
+    border: none;
+    border-radius: 25px;
+    font-size: 1.2rem;
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    font-weight: bold;
+  }
+  
+  #nextGameLink:hover {
+    background: #5A61E5;
+    color: white;
+    transform: scale(1.05);
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes popUp {
+    0% { transform: scale(0.5); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  /* Tactile: plus gros bouton */
+  @media (max-width: 768px) {
+    #nextGameLink {
+      font-size: 1.5rem;
+      padding: 20px 40px;
+      border-radius: 30px;
+    }
+  
+    #winContainer h1 {
+      font-size: 2.5rem;
+    }
+  
+    #winContainer p {
+      font-size: 1.2rem;
+    }
+  }
+  
+  .cheatButton {
+    display: inline-block;
+    color: white;
+    font-size: 1.2rem;
+    cursor: pointer;
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 5px 15px;
+    font-weight: bold;
+    text-align: center;
+    margin-top: 10px;
+    padding: 10px 20px;
+    background: linear-gradient(135deg, rgb(107, 115, 255) 0%, rgb(0, 13, 255) 100%);
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 25px;
+    text-decoration: none;
+    transition: 0.3s;
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Jeu Cycliste</title>
+    <link rel="stylesheet" href="style/erkanindex.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="description" content="Un jeu cycliste avec différents niveaux de difficulté, y compris un mode pour les malvoyants.">
+
+    <!-- Icônes -->
+    <link rel="icon" href="img/icons/favicon-192x192.png">
+    <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Préchargement des images -->
+    <link rel="preload" href="img/image-jeu.webp" as="image" type="image/webp">
+
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(reg => console.log('✅ Service Worker enregistré'))
+                .catch(err => console.error('❌ Erreur Service Worker', err));
+        }
+    </script>
+</head>
+
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: 'Montserrat', sans-serif;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+        background: url(img/image-jeu.webp) no-repeat center center fixed;
+        background-size: cover;
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+        overflow: hidden;
+        touch-action: none;
+    }
+</style>
+
+<body>
+    <div id="container">
+        <!-- Dans le menu à gauche -->
+        <div id="levelSelection">
+            <h2>Choose your level</h2>
+            <button onclick="startGame('easy')">Easy</button>
+            <button onclick="startGame('medium')">Medium</button>
+            <button onclick="startGame('hard')">Hard</button>
+            <button onclick="startGame('blind')">Visually impaired</button>
+            <button id="tiltButton" onclick="toggleTiltControls()">Enable tilt</button>
+        </div>
+
+        <!-- Zone de jeu à droite -->
+        <div id="gameArea">
+            <canvas id="previewCanvas"></canvas>
+            <canvas id="gameCanvas"></canvas>
+
+            <!-- UI du jeu -->
+            <div class="game-ui">
+                <div class="timer" id="timerDisplay">20</div>
+                <div class="hearts-container" id="heartsDisplay">
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                    <span class="heart">❤️</span>
+                </div>
+                <a href="Victoire.html" class="cheatButton">Win</a>
+            </div>
+
+            <button id="pauseButton" onclick="togglePause()">⏸️</button>
+
+            <!-- Menu pause -->
+            <div id="pauseMenu">
+                <h2>Pause</h2>
+                <button onclick="restartGame()">Restart</button>
+                <button onclick="showMainMenu()">Menu</button>
+                <button onclick="togglePause()">Continue</button>
+            </div>
+
+            <!-- Écrans de fin -->
+            <div id="gameOverScreen" class="end-screen">
+                <h1>Game over !</h1>
+                <button onclick="restartGame()">Retry</button>
+            </div>
+
+            <div id="winScreen" class="end-screen">
+                <h1>Gagné ! 🎉</h1>
+                <button onclick="restartGame()">Restart</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Lien vers le fichier JavaScript -->
+    <script src="script/erkanscript.js"></script>
+</body>
+
+</html>

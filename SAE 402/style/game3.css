@@ -1,0 +1,149 @@
+   /* Styles CSS */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            overflow: hidden;
+            height: 100vh;
+            font-family: 'Jersey 10', Arial, sans-serif;
+            background-color: #1a1a2e; /* Fond de secours */
+        }
+
+        .app-container {
+            position: relative;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Image de fond */
+        .background-image {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            background-image: url('/img/museeint_11zon.webp'); /* Remplace avec ton image */
+            background-size: cover;
+            background-position: center;
+            z-index: 1;
+        }
+
+        /* Personnage et bulle */
+        .character-container {
+            position: absolute;
+            left: 50%;
+            bottom: -20px;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            pointer-events: auto; /* Permet le déplacement via JavaScript */
+        }
+
+        .speech-bubble {
+            position: relative;
+            left: 0;
+            bottom: 0;
+            transform: none;
+            margin-bottom: -38px;
+            min-width: 60vw;
+            max-width: 90vw;
+            background: #fff;
+            color: #222;
+            border-radius: 32px;
+            padding: 18px 10px;
+            font-size: 2em;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+            text-align: center;
+            cursor: pointer;
+            z-index: 20;
+            pointer-events: auto;
+            transition: opacity 0.2s;
+        }
+
+        .speech-bubble::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border-width: 14px 16px 0 16px;
+            border-style: solid;
+            border-color: #fff transparent transparent transparent;
+            filter: drop-shadow(0 3px 3px rgba(0,0,0,0.1));
+        }
+
+        /* Animation de disparition du personnage */
+        .character-container.disappear {
+            animation: slideOutLeft 1s forwards;
+        }
+
+        @keyframes slideOutLeft {
+            0% {
+                transform: translateX(-50%) scale(1);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(-100vw) scale(0.5);
+                opacity: 0;
+            }
+        }
+
+        /* Ecran de choix des modes */
+        .mode-selection {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 20;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.5s;
+        }
+
+        .mode-selection.show {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mode-selection h1 {
+            color: #ff5555;
+            margin-bottom: 30px;
+            font-size: 3em;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .mode-btn {
+            background-color: #0f3460;
+            color: white;
+            border: none;
+            padding: 20px 40px;
+            margin: 20px 0;
+            border-radius: 15px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.5em;
+            width: 80%; /* Assure une largeur uniforme */
+            max-width: 400px; /* Limite la largeur à 400px */
+            transition: all 0.3s;
+            text-align: center; /* Centrer le texte */
+        }
+
+        .mode-btn:hover {
+            background-color: #ff5555;
+            transform: scale(1.05);
+        }
+
+        .mode-description {
+            margin: 15px 0;
+            color: #ccc;
+            font-size: 1.2em;
+        }

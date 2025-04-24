@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>Ball Trap Game</title>
+  <meta name="description"
+    content="Play the Ball Trap game, a fun mobile game where you have to aim accurately, avoid the traps and beat your best score !">
+  <meta name="theme-color" content="#FF5722">
+
+  <!-- Preload image -->
+  <link rel="preload" href="/img/fond_11zon.webp" as="image">
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="style/stylejeu.css">
+
+  <!-- PWA Essentials -->
+  <link rel="manifest" href="manifest.json">
+  <link rel="apple-touch-icon" sizes="192x192" href="img/icons/favicon-192x192.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="img/icons/favicon-192x192.png">
+
+  <!-- Scripts -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js" defer></script>
+  <audio id="gameOverSound" src="sons/game-over.mp3" preload="auto"></audio>
+</head>
+
+<body>
+  <canvas id="gameCanvas"></canvas>
+  <div id="targetHole" class="hole"></div>
+  <div id="trapHole1" class="hole trapHole"></div>
+  <div id="trapHole2" class="hole trapHole"></div>
+  <div id="trapHole3" class="hole trapHole"></div>
+  <div id="countdown"></div>
+  <button id="pauseButton">PAUSE</button>
+
+  <div id="ui" style="opacity: 0;">
+    <div>⭐ Score: <span id="score">0</span></div>
+    <div>❤️ Lives: <span id="lives"></span></div>
+    <div class="progress-container">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+    <div id="hintButton" style="display: block; text-align:center;">Hint</div>
+    <div id="hintText" style="display: none; margin-top: 10px; color: rgb(235, 255, 53); font-size: 16px;">
+      2 – pause – 2
+    </div>
+  </div>
+
+  <button id="startButton" class="pulse">Start</button>
+  <!-- <button id="permissionButton">Enable Tilt Control</button> -->
+  <div id="orientationStatus"></div>
+
+  <div id="cheatNotification">Cheat code activated!</div>
+
+  <div id="gameOverScreen">
+    <div id="gameOverText">GAME OVER</div>
+    <div style="color: white; font-size: 1.5rem; margin-bottom: 30px;">Score: <span id="finalScoreValue">0</span></div>
+    <button id="restartButton">RESTART</button>
+  </div>
+
+  <!-- Ton script JS principal -->
+  <script src="script/scriptjeu.js" defer></script>
+
+  <!-- Enregistrement du Service Worker -->
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js')
+        .then(() => console.log('Service Worker enregistré sur jeu.html'))
+        .catch(err => console.error('Erreur Service Worker jeu.html :', err));
+    }
+  </script>
+</body>
+
+</html>

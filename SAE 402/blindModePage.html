@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Alarm of the Mulhouse Fine Arts Museum</title>
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="style/blindmode.css">
+
+    <!-- Manifest PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#4CAF50">
+    <meta name="description" content="Sound memory game: listen and reproduce the melody.">
+
+    <!-- PWA Icons -->
+    <link rel="icon" href="img/icons/favicon-192x192.png">
+    <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<body>
+    <div id="startScreen">
+        <h1>The Alarm of the Mulhouse Fine Arts Museum</h1>
+        <div id="instructions">Sound memory game: listen to the sequence and reproduce it.</div>
+        <button id="startBtn">Start</button>
+    </div>
+
+    <div id="gameContainer">
+        <div id="gameInfo">
+            <div>Level: <span id="levelDisplay">1</span></div>
+            <div>Score: <span id="scoreDisplay">0</span></div>
+        </div>
+        <div class="button-container">
+            <div id="yellowBtn" class="button" aria-label="Trumpet">Trumpet</div>
+            <div id="redBtn" class="button" aria-label="Guitar">Guitar</div>
+            <div id="blueBtn" class="button" aria-label="Piano">Piano</div>
+            <div id="greenBtn" class="button" aria-label="Accordion">Accordion</div>
+        </div>
+    </div>
+
+    <div id="winPopup" class="popup">
+        <div class="popup-content">
+            <h2>Congratulations!</h2>
+            <p>You completed the levels with a score of <span id="finalScore">0</span>!</p>
+            <button id="continueBtn">Continue to painting room</button>
+        </div>
+    </div>
+
+    <div id="losePopup" class="popup">
+        <div class="popup-content">
+            <h2>Too bad!</h2>
+            <p>You made a mistake. Score: <span id="loseScore">0</span></p>
+            <button id="retryBtn">Retry</button>
+        </div>
+    </div>
+
+    <!-- Audio -->
+    <audio id="yellowSound" src="son/Séquence 02.mp3" preload="auto"></audio>
+    <audio id="redSound" src="son/Séquence 03.mp3" preload="auto"></audio>
+    <audio id="blueSound" src="son/piano.mp3" preload="auto"></audio>
+    <audio id="greenSound" src="son/Séquence 01.mp3" preload="auto"></audio>
+
+    <audio id="correctSound" src="son/victory.mp3" preload="auto"></audio>
+
+    <script src="script/blindmode.js"></script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                    .then(reg => console.log("✅ Service Worker enregistré", reg))
+                    .catch(err => console.error("❌ Erreur Service Worker", err));
+            });
+        }
+    </script>
+</body>
+
+</html>

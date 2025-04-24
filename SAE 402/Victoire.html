@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Win !</title>
+  <link rel="stylesheet" href="style/erkanindex.css">
+
+  <!-- Manifest PWA -->
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#4CAF50">
+  <meta name="description" content="Écran de victoire du jeu cycliste. En route vers le musée !">
+
+  <!-- Icônes -->
+  <link rel="icon" href="img/icons/favicon-192x192.png">
+  <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <!-- Service Worker -->
+ 
+</head>
+
+<body>
+  <div id="winContainer">
+    <h1>🎉 Congratulations! 🎉</h1>
+    <p>You have successfully reached the museum!</p>
+    <p>Press below to start the next challenge.</p>
+    <a href="musee.html" id="nextGameLink">🚀 Start next game</a>
+  </div> <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js')
+        .then(reg => console.log('✅ Service Worker enregistré'))
+        .catch(err => console.error('❌ Erreur Service Worker', err));
+    }
+  </script>
+</body>
+</html>
