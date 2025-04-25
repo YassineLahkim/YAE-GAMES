@@ -201,10 +201,10 @@ async function toggleTiltControls() {
             const permissionState = await DeviceOrientationEvent.requestPermission();
             if (permissionState === 'granted') {
                 tiltEnabled = true;
-                tiltButton.textContent = 'Désactiver Inclinaison';
+                tiltButton.textContent = 'Disable Tilt';
             } else {
                 tiltEnabled = false;
-                tiltButton.textContent = 'Activer Inclinaison';
+                tiltButton.textContent = 'Enable Tilt';
                 alert('L\'inclinaison nécessite votre permission');
             }
         } catch (error) {
@@ -212,7 +212,7 @@ async function toggleTiltControls() {
         }
     } else {
         tiltEnabled = !tiltEnabled;
-        tiltButton.textContent = tiltEnabled ? 'Désactiver Inclinaison' : 'Activer Inclinaison';
+        tiltButton.textContent = tiltEnabled ? 'Disable Tilt' : 'Enable Tilt';
 
         if (!tiltEnabled) {
             player.x = canvasWidth / 2 - player.width / 2;

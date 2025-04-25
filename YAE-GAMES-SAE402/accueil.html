@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
 
 <head>
   <meta charset="UTF-8">
@@ -14,6 +14,11 @@
   <!-- Feuille de style -->
   <link rel="stylesheet" href="style/styleaccueil.css">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet" media="all" />
+
   <!-- PWA manifest -->
   <link rel="manifest" href="manifest.json">
   <link rel="apple-touch-icon" sizes="192x192" href="img/icons/favicon-192x192.png">
@@ -21,7 +26,11 @@
 </head>
 
 <body>
+
+
   <main id="startScreen" role="main" aria-label="Écran de démarrage du jeu Ball Master">
+    <a href="yassineindex.html" class="back-button">Back</a>
+
     <h1 id="gameTitle">Ball Master</h1>
     <p id="gameSubtitle">Reach the hole 3 times to win !</p>
 
@@ -34,8 +43,9 @@
         Standard Mode
       </button>
 
-      <button class="game-btn accessibility-btn" onclick="location.assign('jeu1.html')" aria-label="Lancer le mode accessible">
-        Accessible Mode 
+      <button class="game-btn accessibility-btn" onclick="location.assign('jeu1.html')"
+        aria-label="Lancer le mode accessible">
+        Accessible Mode
       </button>
     </div>
   </main>

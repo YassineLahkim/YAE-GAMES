@@ -69,7 +69,7 @@
           className: 'user-circle'
         })
         .addTo(map)
-        .bindTooltip("Votre localisation", {
+        .bindTooltip("Your position", {
           permanent: true,
           direction: 'top',
           className: 'user-tooltip'
@@ -85,7 +85,7 @@
   
     function onError(err) {
       console.error("Géoloc impossible :", err);
-      alert("Impossible de te localiser : " + err.message);
+      alert("Impossible to locate you : " + err.message);
     }
   
     function closeMinimap() {

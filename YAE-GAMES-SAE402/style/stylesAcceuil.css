@@ -15,7 +15,7 @@ body {
 .app-container {
     position: relative;
     min-height: 100vh;
-    background: linear-gradient(to bottom, #80d7fc 0%, #87C4B3 100%);
+    background: linear-gradient(to bottom, #64b6da 0%, #afecdb 100%);
     overflow: hidden;
 }
 
@@ -72,14 +72,16 @@ body {
     cursor: pointer;
     font-size: 1.5em;
     margin: 30px auto 0;
-    display: block;
-    pointer-events: auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;    pointer-events: auto;
     transition: all 0.3s ease;
     font-family: 'Jersey 10', monospace;
     text-transform: uppercase;
     letter-spacing: 2px;
     text-decoration: none;
     min-width: 180px;
+    height: 50px;
     width: fit-content;
     animation: float 3s ease-in-out infinite;
 }
