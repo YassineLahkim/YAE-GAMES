@@ -376,9 +376,12 @@ function handleCollision(obstacle) {
 }
 
 function showWinScreen() {
-    gameOver = true;
-    isPaused = true; // Mettre le jeu en pause pour arrêter les intervalles
-    window.location.href = 'Victoire.html'; // Rediriger vers la nouvelle page
+    // Créer un lien invisible et cliquer dessus
+    const link = document.createElement('a');
+    link.href = './Victoire.html';
+    link.style.display = 'none';
+    document.body.appendChild(link);
+    link.click();
 }
 
 

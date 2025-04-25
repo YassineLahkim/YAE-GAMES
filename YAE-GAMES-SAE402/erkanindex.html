@@ -33,6 +33,12 @@
             navigator.serviceWorker.register('/sw.js')
                 .then(reg => console.log('✅ Service Worker enregistré'))
                 .catch(err => console.error('❌ Erreur Service Worker', err));
+
+                self.addEventListener('fetch', (event) => {
+  if (event.request.url.includes('Victoire.html')) {
+    event.respondWith(fetch(event.request));
+  }
+});
         }
     </script>
 </head>
