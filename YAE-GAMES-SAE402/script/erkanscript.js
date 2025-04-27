@@ -376,13 +376,15 @@ function handleCollision(obstacle) {
 }
 
 function showWinScreen() {
-    // Créer un lien invisible et cliquer dessus
-    const link = document.createElement('a');
-    link.href = './Victoire.html';
-    link.style.display = 'none';
-    document.body.appendChild(link);
-    link.click();
+    // Nettoie tous les intervalles pour arrêter le jeu
+    clearIntervals();
+    gameStarted = false;
+    isPaused = false;
+    player.visible = false;
+    // Redirige vers la page de victoire
+    window.location.href = './Victoire.html';
 }
+
 
 
 function showGameOver() {
