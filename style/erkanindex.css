@@ -3,7 +3,7 @@
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Montserrat', sans-serif;
+    font-family: 'Jersey 10', Arial, sans-serif;
     -webkit-tap-highlight-color: transparent;
 }
 
@@ -16,7 +16,7 @@ body {
     height: 100vh;
     margin: 0;
     overflow: hidden;
-    background: url('/img/image-jeu.webp');
+    background: url('/img/image-fond2.webp');
 }
 
 /* Conteneur principal */
@@ -114,7 +114,6 @@ body {
 #tiltButton {
     position: absolute;
     top: 80px;
-    right: 20px;
     background: rgba(255, 255, 255, 0.8);
     border: none;
     padding: 10px 20px;
@@ -242,7 +241,6 @@ body {
     align-items: center;
     height: 100vh;
     text-align: center;
-    background: url('../img/image-jeu.webp') no-repeat center center fixed;
     background-size: cover;
     color: white;
     padding: 20px;
@@ -329,4 +327,25 @@ body {
     border-radius: 25px;
     text-decoration: none;
     transition: 0.3s;
+}
+
+
+.back-button {
+    position: absolute;
+    bottom: 25px;
+    left: 20px;
+    padding: 10px 15px;
+    background-color: rgba(48, 195, 213, 0.8);
+    border-radius: 20px;
+    text-decoration: none;
+    color: white;
+    font-size: 1em;
+    z-index: 100;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s ease;
+}
+
+.back-button:hover {
+    background-color: rgba(255, 255, 255, 1);
+    transform: scale(1.05);
 }

@@ -201,10 +201,10 @@ async function toggleTiltControls() {
             const permissionState = await DeviceOrientationEvent.requestPermission();
             if (permissionState === 'granted') {
                 tiltEnabled = true;
-                tiltButton.textContent = 'Désactiver Inclinaison';
+                tiltButton.textContent = 'Disable Tilt';
             } else {
                 tiltEnabled = false;
-                tiltButton.textContent = 'Activer Inclinaison';
+                tiltButton.textContent = 'Enable Tilt';
                 alert('L\'inclinaison nécessite votre permission');
             }
         } catch (error) {
@@ -212,7 +212,7 @@ async function toggleTiltControls() {
         }
     } else {
         tiltEnabled = !tiltEnabled;
-        tiltButton.textContent = tiltEnabled ? 'Désactiver Inclinaison' : 'Activer Inclinaison';
+        tiltButton.textContent = tiltEnabled ? 'Disable Tilt' : 'Enable Tilt';
 
         if (!tiltEnabled) {
             player.x = canvasWidth / 2 - player.width / 2;
@@ -376,10 +376,15 @@ function handleCollision(obstacle) {
 }
 
 function showWinScreen() {
-    gameOver = true;
-    isPaused = true; // Mettre le jeu en pause pour arrêter les intervalles
-    window.location.href = 'Victoire.html'; // Rediriger vers la nouvelle page
+    // Nettoie tous les intervalles pour arrêter le jeu
+    clearIntervals();
+    gameStarted = false;
+    isPaused = false;
+    player.visible = false;
+    // Redirige vers la page de victoire
+    window.location.href = './Victoire.html';
 }
+
 
 
 function showGameOver() {

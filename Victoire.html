@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,6 +12,11 @@
   <meta name="theme-color" content="#4CAF50">
   <meta name="description" content="Écran de victoire du jeu cycliste. En route vers le musée !">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preload" as="style" href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" />
+  <link href="https://fonts.googleapis.com/css2?family=Jersey+10&display=swap" rel="stylesheet" media="all" />
+
   <!-- Icônes -->
   <link rel="icon" href="img/icons/favicon-192x192.png">
   <link rel="apple-touch-icon" href="img/icons/favicon-192x192.png">
@@ -18,16 +24,19 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
   <!-- Service Worker -->
- 
+
 </head>
 
 <body>
+
+  <a href="erkanindex.html" class="back-button">Back</a>
   <div id="winContainer">
-    <h1>🎉 Congratulations! 🎉</h1>
+    <h1> Congratulations! </h1>
     <p>You have successfully reached the museum!</p>
     <p>Press below to start the next challenge.</p>
-    <a href="musee.html" id="nextGameLink">🚀 Start next game</a>
-  </div> <script>
+    <a href="musee.html" id="nextGameLink"> Start next game</a>
+  </div>
+  <script>
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('/sw.js')
         .then(reg => console.log('✅ Service Worker enregistré'))
@@ -35,4 +44,5 @@
     }
   </script>
 </body>
+
 </html>
